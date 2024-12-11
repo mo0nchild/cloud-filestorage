@@ -1,0 +1,103 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{C766DE21-71FE-4FE3-BC67-D0E92EE37743}"
+	ProjectSection(SolutionItems) = preProject
+		docker-compose.yml = docker-compose.yml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Databases", "Databases", "{532F629A-68F5-4E4F-BC59-F08882D1C3E3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pinterest.Database.Settings", "Pinterest.Infrastructures\Pinterest.Databases\Pinterest.Database.Settings\Pinterest.Database.Settings.csproj", "{25C526CA-6320-4AA6-89B8-ACC5CF62CB06}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Domains", "Domains", "{E79F92FA-D7F7-43ED-BF42-DA4DF7B2EA73}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pinterest.Domain.Core", "Pinterest.Domains\Pinterest.Domain.Core\Pinterest.Domain.Core.csproj", "{ADA612CD-A61B-4445-8945-9A81A52DA756}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pinterest.Domain.Users", "Pinterest.Domains\Pinterest.Domain.Users\Pinterest.Domain.Users.csproj", "{E97B93C7-BD95-4D6D-A69C-016AA72AE8F6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Applications", "Applications", "{1BB37807-959F-4FB9-81A8-0770022C90F8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructures", "Infrastructures", "{AE55D27A-AE30-4ABC-B7BC-E1A703FCB7FF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pinterest.Application.Users", "Pinterest.Applications\Pinterest.Application.Users\Pinterest.Application.Users.csproj", "{1DDF12A3-1F76-4A8E-8EF0-DB6FD1CBED24}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{4E37276A-04E7-4A91-BF77-E31352D77668}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pinterest.Shared.Commons", "Pinterest.Shared\Pinterest.Shared.Commons\Pinterest.Shared.Commons.csproj", "{4B266439-0282-45E9-BA8B-084AFE6EE840}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pinterest.Database.Users", "Pinterest.Infrastructures\Pinterest.Databases\Pinterest.Database.Users\Pinterest.Database.Users.csproj", "{50F6984D-3835-43B5-AD2A-C0DF8C955D2E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Systems", "Systems", "{5EA4E633-3DC2-4430-82DD-C2C2D80B7397}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pinterest.Api.Users", "Pinterest.Systems\Pinterest.Api.Users\Pinterest.Api.Users.csproj", "{A23AAD66-6633-4B95-A53C-3E5856FCCC4F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MessageBrokers", "MessageBrokers", "{6633DE20-F167-48D4-AA4E-6B034E8A82E2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pinterest.MessageBrokers.RabbitMQ", "Pinterest.Infrastructures\Pinterest.MessageBrokers\Pinterest.MessageBrokers.RabbitMQ\Pinterest.MessageBrokers.RabbitMQ.csproj", "{B6471505-E84C-422C-ADEA-6F3A6D6E4314}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pinterest.Domain.Messages", "Pinterest.Domains\Pinterest.Domain.Messages\Pinterest.Domain.Messages.csproj", "{F73C655D-3218-4134-A154-90DDD83BD5DF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestBroker", "Pinterest.Systems\TestBroker\TestBroker.csproj", "{76E8F2FD-EC7F-4E6F-839A-222687AD7054}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{25C526CA-6320-4AA6-89B8-ACC5CF62CB06}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{25C526CA-6320-4AA6-89B8-ACC5CF62CB06}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{25C526CA-6320-4AA6-89B8-ACC5CF62CB06}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{25C526CA-6320-4AA6-89B8-ACC5CF62CB06}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ADA612CD-A61B-4445-8945-9A81A52DA756}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ADA612CD-A61B-4445-8945-9A81A52DA756}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ADA612CD-A61B-4445-8945-9A81A52DA756}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ADA612CD-A61B-4445-8945-9A81A52DA756}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E97B93C7-BD95-4D6D-A69C-016AA72AE8F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E97B93C7-BD95-4D6D-A69C-016AA72AE8F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E97B93C7-BD95-4D6D-A69C-016AA72AE8F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E97B93C7-BD95-4D6D-A69C-016AA72AE8F6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1DDF12A3-1F76-4A8E-8EF0-DB6FD1CBED24}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1DDF12A3-1F76-4A8E-8EF0-DB6FD1CBED24}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1DDF12A3-1F76-4A8E-8EF0-DB6FD1CBED24}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1DDF12A3-1F76-4A8E-8EF0-DB6FD1CBED24}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4B266439-0282-45E9-BA8B-084AFE6EE840}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4B266439-0282-45E9-BA8B-084AFE6EE840}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4B266439-0282-45E9-BA8B-084AFE6EE840}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4B266439-0282-45E9-BA8B-084AFE6EE840}.Release|Any CPU.Build.0 = Release|Any CPU
+		{50F6984D-3835-43B5-AD2A-C0DF8C955D2E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{50F6984D-3835-43B5-AD2A-C0DF8C955D2E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{50F6984D-3835-43B5-AD2A-C0DF8C955D2E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{50F6984D-3835-43B5-AD2A-C0DF8C955D2E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A23AAD66-6633-4B95-A53C-3E5856FCCC4F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A23AAD66-6633-4B95-A53C-3E5856FCCC4F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A23AAD66-6633-4B95-A53C-3E5856FCCC4F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A23AAD66-6633-4B95-A53C-3E5856FCCC4F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B6471505-E84C-422C-ADEA-6F3A6D6E4314}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B6471505-E84C-422C-ADEA-6F3A6D6E4314}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B6471505-E84C-422C-ADEA-6F3A6D6E4314}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B6471505-E84C-422C-ADEA-6F3A6D6E4314}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F73C655D-3218-4134-A154-90DDD83BD5DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F73C655D-3218-4134-A154-90DDD83BD5DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F73C655D-3218-4134-A154-90DDD83BD5DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F73C655D-3218-4134-A154-90DDD83BD5DF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{76E8F2FD-EC7F-4E6F-839A-222687AD7054}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{76E8F2FD-EC7F-4E6F-839A-222687AD7054}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{76E8F2FD-EC7F-4E6F-839A-222687AD7054}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{76E8F2FD-EC7F-4E6F-839A-222687AD7054}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{25C526CA-6320-4AA6-89B8-ACC5CF62CB06} = {532F629A-68F5-4E4F-BC59-F08882D1C3E3}
+		{ADA612CD-A61B-4445-8945-9A81A52DA756} = {E79F92FA-D7F7-43ED-BF42-DA4DF7B2EA73}
+		{E97B93C7-BD95-4D6D-A69C-016AA72AE8F6} = {E79F92FA-D7F7-43ED-BF42-DA4DF7B2EA73}
+		{532F629A-68F5-4E4F-BC59-F08882D1C3E3} = {AE55D27A-AE30-4ABC-B7BC-E1A703FCB7FF}
+		{1DDF12A3-1F76-4A8E-8EF0-DB6FD1CBED24} = {1BB37807-959F-4FB9-81A8-0770022C90F8}
+		{4B266439-0282-45E9-BA8B-084AFE6EE840} = {4E37276A-04E7-4A91-BF77-E31352D77668}
+		{50F6984D-3835-43B5-AD2A-C0DF8C955D2E} = {532F629A-68F5-4E4F-BC59-F08882D1C3E3}
+		{A23AAD66-6633-4B95-A53C-3E5856FCCC4F} = {5EA4E633-3DC2-4430-82DD-C2C2D80B7397}
+		{6633DE20-F167-48D4-AA4E-6B034E8A82E2} = {AE55D27A-AE30-4ABC-B7BC-E1A703FCB7FF}
+		{B6471505-E84C-422C-ADEA-6F3A6D6E4314} = {6633DE20-F167-48D4-AA4E-6B034E8A82E2}
+		{F73C655D-3218-4134-A154-90DDD83BD5DF} = {E79F92FA-D7F7-43ED-BF42-DA4DF7B2EA73}
+		{76E8F2FD-EC7F-4E6F-839A-222687AD7054} = {5EA4E633-3DC2-4430-82DD-C2C2D80B7397}
+	EndGlobalSection
+EndGlobal

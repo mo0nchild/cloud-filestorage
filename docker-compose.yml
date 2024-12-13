@@ -5,6 +5,30 @@ services:
 #    build:
 #      context: .
 #      dockerfile: Pinterest.Systems/Pinterest.Api.Users/Dockerfile
+#  pinterest.api.posts:
+#    image: pinterest.api.posts
+#    build:
+#      context: .
+#      dockerfile: Pinterest.Systems/Pinterest.Api.Posts/Dockerfile
+#    ports:
+#      - "8086:8080"
+#    depends_on:
+#      postgres:
+#        condition: service_healthy
+#      minio: 
+#        condition: service_started
+#      rabbitmq:
+#        condition: service_started
+#    networks:
+#      pinterest-network:
+#        aliases:
+#          - pinterest.api.posts
+#        ipv4_address: 172.24.0.6
+#    deploy:
+#      restart_policy:
+#        condition: on-failure
+#        max_attempts: 10
+    
   postgres:
     image: postgres:latest
     container_name: postgres
@@ -20,18 +44,18 @@ services:
           - postgres
         ipv4_address: 172.24.0.2
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U postgres -d pinterest.users" ]
+      test: [ "CMD-SHELL", "pg_isready -U postgres -d pinterest.accounts" ]
       interval: 10s
       timeout: 5s
       retries: 5
       start_period: 10s
     volumes:
-      - "./postgres-data:/var/lib/postgresql/data"
+      - "./docker-volumes/postgres-data:/var/lib/postgresql/data"
       - "./init.sql:/docker-entrypoint-initdb.d/init.sql"
       
   rabbitmq:
     image: rabbitmq:3.10.7-management
-    container_name: rabbitmq
+    container_name: rabbitMQ
     restart: always
     environment:
       - RABBITMQ_DEFAULT_USER=admin
@@ -41,7 +65,7 @@ services:
       - "5673:5673"
       - "15672:15672"
     volumes:
-      - "./rabbitmq-data:/var/lib/rabbitmq"
+      - "./docker-volumes/rabbitmq-data:/var/lib/rabbitmq"
     networks:
       pinterest-network:
         aliases:
@@ -50,8 +74,9 @@ services:
         
   minio:
     image: quay.io/minio/minio
+    container_name: minioS3
     ports:
-      - "9000:9000"
+      - "9002:9000"
       - "9001:9001"
     networks:
       pinterest-network:
@@ -59,11 +84,10 @@ services:
           - minio
         ipv4_address: 172.24.0.4
     volumes:
-      - "./minio-data/data:/data"
+      - "./docker-volumes/minio-data/data:/data"
     environment:
       - MINIO_ROOT_USER=admin
       - MINIO_ROOT_PASSWORD=1234567890
-      - MINIO_DEFAULT_BUCKETS=models
     restart: always
     command: server /data --console-address :9001
 
@@ -76,3 +100,4 @@ networks:
         - gateway: 172.24.0.1
           subnet: 172.24.0.0/24
         
+

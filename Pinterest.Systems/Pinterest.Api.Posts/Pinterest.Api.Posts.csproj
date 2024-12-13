@@ -1,0 +1,32 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.6"/>
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.10">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Include="..\..\.dockerignore">
+        <Link>.dockerignore</Link>
+      </Content>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\Pinterest.Infrastructures\Pinterest.Databases\Pinterest.Database.Posts\Pinterest.Database.Posts.csproj" />
+      <ProjectReference Include="..\..\Pinterest.Infrastructures\Pinterest.S3Storages\Pinterest.S3Storage.Minio\Pinterest.S3Storage.Minio.csproj" />
+      <ProjectReference Include="..\..\Pinterest.Shared\Pinterest.Shared.Commons\Pinterest.Shared.Commons.csproj" />
+      <ProjectReference Include="..\..\Pinterest.Shared\Pinterest.Shared.Security\Pinterest.Shared.Security.csproj" />
+    </ItemGroup>
+
+</Project>

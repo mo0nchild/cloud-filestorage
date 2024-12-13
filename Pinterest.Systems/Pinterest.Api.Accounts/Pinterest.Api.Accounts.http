@@ -1,0 +1,6 @@
+@Pinterest.Api.Accounts_HostAddress = http://localhost:5075
+
+GET {{Pinterest.Api.Accounts_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

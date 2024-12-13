@@ -8,5 +8,5 @@ public class BaseEntity
     [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public virtual Guid Uuid { get; set; } = Guid.NewGuid();
     
-    public DateTime CreatedTime { get; set; } = DateTime.Now;
+    public DateTime CreatedTime { get; set; } = DateTime.UtcNow;
 }

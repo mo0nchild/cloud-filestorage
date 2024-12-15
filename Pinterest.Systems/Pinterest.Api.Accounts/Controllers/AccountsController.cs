@@ -24,7 +24,7 @@ public class AccountsController : ControllerBase
         return Ok(await _accountsService.GetAccountByAccessToken(accessToken));
     }
     [Route("registrate"), HttpPost]
-    [ProducesResponseType(typeof(string), (int)HttpStatusCode.OK)]
+    [ProducesResponseType(typeof(IdentityModel), (int)HttpStatusCode.OK)]
     [ProducesResponseType((int)HttpStatusCode.BadRequest)]
     public async Task<IActionResult> RegistrateAccount([FromBody] RegistrationModel request)
     {

@@ -35,7 +35,7 @@ services:
     environment:
       - POSTGRES_NAME=postgres
       - POSTGRES_PASSWORD=1234567890
-      - POSTGRES_DB=pinterest.users
+      - POSTGRES_DB=pinterest.accounts
     ports:
       - "7272:5432"
     networks:

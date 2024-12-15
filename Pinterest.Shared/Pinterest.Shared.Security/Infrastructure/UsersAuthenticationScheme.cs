@@ -20,7 +20,7 @@ namespace Pinterest.Shared.Security.Infrastructure;
 public class UsersAuthenticationScheme : AuthenticationHandler<UsersAuthenticationOptions>
 {
     private readonly ITokenService _tokenService;
-
+    protected ILogger<UsersAuthenticationScheme> Logger { get; }
     public UsersAuthenticationScheme(IOptionsMonitor<UsersAuthenticationOptions> options, 
         ILoggerFactory logger,
         UrlEncoder encoder,
@@ -28,10 +28,12 @@ public class UsersAuthenticationScheme : AuthenticationHandler<UsersAuthenticati
         ITokenService tokenService) : base(options, logger, encoder, clock)
     {
         _tokenService = tokenService;
+        Logger = logger.CreateLogger<UsersAuthenticationScheme>();
     }
     protected override async Task<AuthenticateResult> HandleAuthenticateAsync()
     {
         var authorizationHeader = Request.Headers["X-Authorization"].FirstOrDefault();
+        Logger.LogInformation($"Authorization header: {authorizationHeader}");
         if (string.IsNullOrEmpty(authorizationHeader) || !authorizationHeader.StartsWith("Bearer "))
         {
             return AuthenticateResult.Fail("Authentication header validation error");

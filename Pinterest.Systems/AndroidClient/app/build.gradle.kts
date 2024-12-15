@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    kotlin("plugin.serialization")
 }
 
 android {
@@ -56,12 +57,14 @@ dependencies {
     implementation(libs.androidx.material)
     implementation(libs.coil.compose)
 
-    implementation("io.ktor:ktor-client-core:2.3.0")  // Core Ktor client
-    implementation("io.ktor:ktor-client-cio:2.3.0")   // CIO engine
-    implementation("io.ktor:ktor-client-content-negotiation:2.3.0") // For content negotiation (JSON)
-    implementation("io.ktor:ktor-serialization-kotlinx-json:2.3.0") // Ktor serialization feature for Kotlin
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.0") // Kotlinx serialization library
-
+    implementation("io.ktor:ktor-client-core:2.3.0")
+    implementation("io.ktor:ktor-client-android:2.3.0")
+/*    implementation("io.ktor:ktor-client-serialization:2.3.0")*/
+    implementation("io.ktor:ktor-client-content-negotiation:2.3.0")
+    implementation("io.ktor:ktor-client-logging:2.3.0")
+    implementation("io.ktor:ktor-client-cio:2.3.0")
+    implementation("io.ktor:ktor-serialization-kotlinx-json:2.3.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

@@ -12,6 +12,7 @@ using Pinterest.Shared.Security.Settings;
 
 namespace Pinterest.Api.Posts.Controllers;
 
+[Authorize(AuthenticationSchemes = UsersAuthenticationOptions.DefaultScheme)]
 [Route("posts"), ApiController]
 public class PostsController : ControllerBase
 {
@@ -27,7 +28,7 @@ public class PostsController : ControllerBase
         _mapper = mapper;
         _postsService = postsService;
     }
-    [Authorize(AuthenticationSchemes = UsersAuthenticationOptions.DefaultScheme)]
+    
     [Route("getAll"), HttpGet]
     [ProducesResponseType(typeof(List<PostModel>), (int)HttpStatusCode.OK)]
     [ProducesResponseType((int)HttpStatusCode.BadRequest)]
@@ -35,7 +36,7 @@ public class PostsController : ControllerBase
     {
         return Ok(await _postsService.GetPostsAsync(UserUuid));
     }
-    [Authorize(AuthenticationSchemes = UsersAuthenticationOptions.DefaultScheme)]
+    
     [Route("add"), HttpPost]
     [ProducesResponseType(typeof(string), (int)HttpStatusCode.OK)]
     [ProducesResponseType((int)HttpStatusCode.BadRequest)]

@@ -1,45 +1,47 @@
 package com.example.androidclient.requests
-import io.ktor.client.HttpClient
-import io.ktor.client.call.body
-import io.ktor.client.call.receive
-import io.ktor.client.engine.cio.CIO
-import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
-import io.ktor.client.request.get
-import io.ktor.client.request.header
-import io.ktor.client.statement.HttpResponse
-import io.ktor.client.statement.bodyAsText
-import io.ktor.http.ContentType
-import io.ktor.http.ContentType.Application.Json
-import io.ktor.http.HttpHeaders
-import io.ktor.serialization.kotlinx.json.json
-import kotlinx.coroutines.*
-import kotlinx.serialization.Serializable
-import kotlinx.serialization.json.Json
 
-private const val baseUrl = "http://192.168.0.103:5075"
+import com.example.androidclient.utils.Config
+import io.ktor.client.call.body
+import io.ktor.client.request.get
+import io.ktor.client.request.post
+import io.ktor.client.request.setBody
+import kotlinx.serialization.Serializable
 
 @Serializable
-data class TokenInfo (
-    val uuid: String,
-    val email: String
-)
+data class AccessToken (val accessToken: String)
+@Serializable
+data class RegistrationInfo (val email: String, val password: String)
+@Serializable
+data class AccountInfo (val uuid: String, val email: String)
 
-suspend fun sendGetRequest(): TokenInfo? {
-    val client = HttpClient(CIO) {
-        install(ContentNegotiation) {
-            json(Json { ignoreUnknownKeys = true }) // Configure the JSON serializer to ignore unknown keys
+suspend fun getAccessToken(context: Config, email: String, password: String): AccessToken? {
+    createHttpClient(ApiRoutes.getAccountBaseUrl(context.apiHost)).use { client ->
+        return try {
+            client.get("${ApiRoutes.GET_ACCESS_TOKEN}?" +
+                if (email.isEmpty()) "" else "email=$email&" +
+                if (password.isEmpty()) "" else "password=$password").body()
+        } catch (error: Exception) {
+            error.printStackTrace(); null
         }
     }
-
-    return try {
-        client.get("$baseUrl/users/getTokens?Email=test@gmail.com&Password=1234567890") {
-            header(HttpHeaders.Accept, ContentType.Application.Json)
+}
+suspend fun getAccountInfo(context: Config, accessToken: String): AccountInfo? {
+    createHttpClient(ApiRoutes.getAccountBaseUrl(context.apiHost)).use { client ->
+        return try {
+            client.get("${ApiRoutes.GET_ACCOUNT_INFO}?" +
+                if (accessToken.isEmpty()) "" else "accessToken=$accessToken"
+            ).body()
+        } catch (error: Exception) {
+            error.printStackTrace(); null
         }
-            .body<TokenInfo>()
-    } catch (e: Exception) {
-        e.printStackTrace()
-        null
-    } finally {
-        client.close()
+    }
+}
+suspend fun registrateAccount(context: Config, registrationInfo: RegistrationInfo): AccessToken? {
+    createHttpClient(ApiRoutes.getAccountBaseUrl(context.apiHost)).use { client ->
+        return try {
+            client.post(ApiRoutes.REGISTRATION) { setBody(registrationInfo) }.body()
+        } catch (error: Exception) {
+            error.printStackTrace(); null
+        }
     }
 }

@@ -29,14 +29,14 @@ public class Program
         await builder.Services.AddIdentityServices(builder.Configuration);
 
         var application = builder.Build();
-        /*if (application.Environment.IsDevelopment())
-        {*/
+        if (application.Environment.IsDevelopment())
+        {
             application.UseSwagger();
             application.UseSwaggerUI(options =>
             {
                 options.SwaggerEndpoint("/swagger/v1/swagger.json", "Pinterest.Api.Posts");
             });
-        /*}*/
+        }
         application.UseHttpsRedirection();
         application.UseExceptionsHandler();
         

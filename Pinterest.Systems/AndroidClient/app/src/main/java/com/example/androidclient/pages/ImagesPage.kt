@@ -65,7 +65,7 @@ fun ImageGridPage(navController: NavController) {
         coroutineScope.launch {
             getAllPosts(config!!, storage["accessKey"]!!).let { result ->
                 images = result?.map {
-                    PostInfo(it.title, it.filePath.replace("localhost", SERVER_ADDRESS), it.uuid)
+                    PostInfo(it.title, it.filePath.replace("localhost", config.apiHost), it.uuid)
                 }
                 if (result == null) Toast.makeText(context, "Ошибка загрузки", Toast.LENGTH_LONG).show()
             }

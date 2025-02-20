@@ -7,7 +7,9 @@ using Amazon.S3.Model;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Pinterest.Application.Commons.S3Storage;
+using Pinterest.Application.FileStorage.Infrastructures;
+using Pinterest.Application.FileStorage.Infrastructures.Interfaces;
+using Pinterest.S3Storage.Minio.Configurations;
 using Pinterest.S3Storage.Minio.Infrastructures;
 using Pinterest.S3Storage.Minio.Settings;
 // ReSharper disable ConvertToConstant.Local
@@ -17,34 +19,22 @@ namespace Pinterest.S3Storage.Minio;
 
 public static class Bootstrapper
 {
-    private static readonly string S3StorageSection = "S3Storage";
-    
-    public static async Task<IServiceCollection> AddS3StorageService(this IServiceCollection collection,
+    public static Task<IServiceCollection> AddS3StorageService(this IServiceCollection collection,
         IConfiguration configuration)
     {
-        var options = configuration.GetSection(S3StorageSection).Get<S3StorageOptions>();
-        if (options == null) throw new Exception($"Not found {S3StorageSection} options in configuration");
+        var s3StorageSettings = S3StorageConfiguration.GetS3StorageOptions(configuration);
         collection.AddSingleton<IAmazonS3, AmazonS3Client>(provider =>
         {
-            return new AmazonS3Client(options.S3AccessKey, options.S3SecretKey, new AmazonS3Config()
+            return new AmazonS3Client(s3StorageSettings.S3AccessKey, s3StorageSettings.S3SecretKey, new AmazonS3Config()
             {
-                ServiceURL = options.S3Url,
+                ServiceURL = s3StorageSettings.S3Url,
                 Timeout = TimeSpan.FromSeconds(5),
                 UseHttp = true,
                 ForcePathStyle = true,
             });
         });
-        var client = collection.BuildServiceProvider().GetService<IAmazonS3>()!;
-        var logger = collection.BuildServiceProvider().GetService<ILogger<IAmazonS3>>();
-        var buckets = await client.ListBucketsAsync();
-        foreach (var seedBucket in options.SeedBuckets)
-        {
-            if (buckets.Buckets.FirstOrDefault(item => item.BucketName == seedBucket.BucketName) != null) continue;
-            
-            await client.PutBucketAsync(seedBucket.BucketName);
-            logger.LogInformation($"Added bucket {seedBucket.BucketName}");
-        }
-        collection.AddTransient<IS3StorageService, S3StorageService>();
-        return collection;
+        collection.AddTransient<IFileManager, FileManager>();
+        collection.AddTransient<IBucketManager, BucketManager>();
+        return Task.FromResult(collection);
     } 
 }

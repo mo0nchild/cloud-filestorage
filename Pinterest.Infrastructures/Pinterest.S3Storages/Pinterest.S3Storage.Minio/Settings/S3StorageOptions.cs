@@ -7,7 +7,4 @@ public class S3StorageOptions
     public string S3SecretKey { get; set; } = string.Empty;
 
     public string S3Url { get; set; } = string.Empty;
-
-    
-    public List<SeedBucketsInfo> SeedBuckets { get; set; } = new();
 }

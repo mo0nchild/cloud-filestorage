@@ -11,12 +11,19 @@ using Pinterest.Domain.Authorization.Settings;
 
 namespace Pinterest.Application.Tokens.Services;
 
-public class TokenService(IOptions<TokenOptions> tokenOptions, ILogger<TokenService> logger)
-    : ITokenService
+internal class TokenService : ITokenService
 {
-    private readonly TokenOptions _tokenOptions = tokenOptions.Value;
-    protected ILogger<TokenService> Logger { get; } = logger;
-
+    private TokenOptions _tokenOptions;
+    public TokenService(TokenSecretsSettings secretsSettings, ILogger<TokenService> logger)
+    {
+        _tokenOptions = secretsSettings.Secrets;
+        Logger = logger;
+        secretsSettings.OnSecretsUpdated(newSecrets =>
+        {
+            _tokenOptions = newSecrets;
+        });
+    }
+    private ILogger<TokenService> Logger { get; }
     protected virtual string GenerateToken(Claim[] claims, byte[] symmetricKey, int expires)
     {
         var tokenHandler = new JwtSecurityTokenHandler();
@@ -32,11 +39,12 @@ public class TokenService(IOptions<TokenOptions> tokenOptions, ILogger<TokenServ
     public Task<TokensModel> CreateJwtTokens(Claim[] claims)
     {
         var accessSymmetricKey = Encoding.UTF8.GetBytes(_tokenOptions.AccessSecret);
-        /*var refreshSymmetricKey = Encoding.UTF8.GetBytes(_tokenOptions.RefreshSecret);*/
+        var refreshSymmetricKey = Encoding.UTF8.GetBytes(_tokenOptions.RefreshSecret);
             
         return Task.FromResult(new TokensModel()
         {
             AccessToken = GenerateToken(claims, accessSymmetricKey, _tokenOptions.AccessExpires),
+            RefreshToken = GenerateToken(claims, refreshSymmetricKey, _tokenOptions.RefreshExpires),
         });
     }
     protected virtual Claim[]? ValidateToken(string token, byte[] symmetricKey)
@@ -63,13 +71,12 @@ public class TokenService(IOptions<TokenOptions> tokenOptions, ILogger<TokenServ
             return null;
         }
     } 
-    public Task<Claim[]?> VerifyAccessToken(string token)
+    public Task<Claim[]?> VerifyAccessToken(string accessToken)
     {
-        return Task.FromResult(ValidateToken(token, Encoding.UTF8.GetBytes(_tokenOptions.AccessSecret)));   
+        return Task.FromResult(ValidateToken(accessToken, Encoding.UTF8.GetBytes(_tokenOptions.AccessSecret)));   
     }
-
-    public Task<Claim[]?> VerifyRefreshToken(string token)
+    public Task<Claim[]?> VerifyRefreshToken(string refreshToken)
     {
-        throw new NotImplementedException();
+        return Task.FromResult(ValidateToken(refreshToken, Encoding.UTF8.GetBytes(_tokenOptions.RefreshSecret)));
     }
 }

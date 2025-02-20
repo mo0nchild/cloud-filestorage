@@ -6,6 +6,7 @@ namespace Pinterest.Application.Accounts.Models;
 public class IdentityModel
 {
     public string AccessToken { get; set; } = string.Empty;
+    public string RefreshToken { get; set; } = string.Empty;
 }
 public class IdentityModelProfile : Profile
 {

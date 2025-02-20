@@ -19,6 +19,7 @@
     <ItemGroup>
       <ProjectReference Include="..\..\Pinterest.Applications\Pinterest.Application.Accounts\Pinterest.Application.Accounts.csproj" />
       <ProjectReference Include="..\..\Pinterest.Infrastructures\Pinterest.Databases\Pinterest.Database.Accounts\Pinterest.Database.Accounts.csproj" />
+      <ProjectReference Include="..\..\Pinterest.Infrastructures\Pinterest.MessageBrokers\Pinterest.MessageBrokers.Saga\Pinterest.MessageBrokers.Saga.csproj" />
       <ProjectReference Include="..\..\Pinterest.Shared\Pinterest.Shared.Commons\Pinterest.Shared.Commons.csproj" />
       <ProjectReference Include="..\..\Pinterest.Shared\Pinterest.Shared.Security\Pinterest.Shared.Security.csproj" />
     </ItemGroup>

@@ -12,23 +12,23 @@ namespace Pinterest.Database.Accounts;
 public static class Bootstrapper
 {
     private static readonly string DbSettingsSection = "Database";
-    public static async Task<IServiceCollection> AddAccountsDatabase(this IServiceCollection collection, 
+    public static async Task<IServiceCollection> AddAccountsDatabase(this IServiceCollection serviceCollection, 
         IConfiguration configuration)
     {
-        var settings = collection.Configure<AccountsDbContextSettings>(configuration.GetSection(DbSettingsSection))
+        var settings = serviceCollection.Configure<AccountsDbContextSettings>(configuration.GetSection(DbSettingsSection))
             .BuildServiceProvider()
             .GetRequiredService<IOptions<AccountsDbContextSettings>>();
-        collection.AddDbContextFactory<AccountsDbContext>(options =>
+        serviceCollection.AddDbContextFactory<AccountsDbContext>(options =>
         {
             DbContextOptionsFactory<AccountsDbContext>.Configure(settings.Value.ConnectionString, true).Invoke(options);
         });
-        await collection.AddDbContextFactoryWrapper<IAccountsRepository, AccountsDbContext>();
+        await serviceCollection.AddDbContextFactoryWrapper<IAccountsRepository, AccountsDbContext>();
         
-        var serviceProvider = collection.BuildServiceProvider();
+        var serviceProvider = serviceCollection.BuildServiceProvider();
         var dbContextFactory = serviceProvider.GetService<IDbContextFactory<AccountsDbContext>>()!;
 
         await using var dbContext = await dbContextFactory.CreateDbContextAsync();
         await dbContext.Database.MigrateAsync();
-        return collection;
+        return serviceCollection;
     }
 }

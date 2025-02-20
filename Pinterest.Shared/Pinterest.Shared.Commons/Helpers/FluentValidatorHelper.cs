@@ -10,7 +10,7 @@ public static class ValidatorsRegisterHelper
         var assemblies = AppDomain.CurrentDomain.GetAssemblies()
             .Where(s => s.FullName != null && s.FullName.ToLower().StartsWith("pinterest."));
 
-        assemblies.ToList().ForEach(x => { services.AddValidatorsFromAssembly(x, ServiceLifetime.Scoped); });
+        assemblies.ToList().ForEach(x => { services.AddValidatorsFromAssembly(x, ServiceLifetime.Singleton); });
         return Task.CompletedTask;
     }
 }

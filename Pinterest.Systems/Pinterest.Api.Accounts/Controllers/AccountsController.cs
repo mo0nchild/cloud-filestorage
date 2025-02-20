@@ -5,36 +5,44 @@ using Pinterest.Application.Accounts.Models;
 
 namespace Pinterest.Api.Accounts.Controllers;
 
-[Route("users"), ApiController]
+[Route("accounts"), ApiController]
 public class AccountsController : ControllerBase
 {
     private readonly IAccountsService _accountsService;
-    public ILogger<AccountsController> Logger { get; }
-
     public AccountsController(IAccountsService accountsService, ILogger<AccountsController> logger)
     {
         Logger = logger;
         _accountsService = accountsService;
     }
+    private ILogger<AccountsController> Logger { get; }
+    
     [Route("getInfo"), HttpGet]
     [ProducesResponseType(typeof(AccountModel), (int)HttpStatusCode.OK)]
     [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-    public async Task<IActionResult> GetAccountByToken([FromQuery] string accessToken)
+    public async Task<IActionResult> GetAccountByToken([FromHeader(Name = "X-AccessToken")] string accessToken)
     {
         return Ok(await _accountsService.GetAccountByAccessToken(accessToken));
     }
-    [Route("registrate"), HttpPost]
-    [ProducesResponseType(typeof(IdentityModel), (int)HttpStatusCode.OK)]
-    [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-    public async Task<IActionResult> RegistrateAccount([FromBody] RegistrationModel request)
-    {
-        return Ok(await _accountsService.Registration(request));
-    }
     [Route("getTokens"), HttpGet]
-    [ProducesResponseType(typeof(AccountModel), (int)HttpStatusCode.OK)]
+    [ProducesResponseType(typeof(IdentityModel), (int)HttpStatusCode.OK)]
     [ProducesResponseType((int)HttpStatusCode.BadRequest)]
     public async Task<IActionResult> GetAuthTokens([FromQuery] CredentialsModel request)
     {
         return Ok(await _accountsService.GetTokensByCredentials(request));
+    }
+    [Route("getTokens/byRefresh"), HttpPatch]
+    [ProducesResponseType(typeof(IdentityModel), (int)HttpStatusCode.OK)]
+    [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+    public async Task<IActionResult> GetTokensByRefresh([FromHeader(Name = "X-RefreshToken")] string refreshToken)
+    {
+        return Ok(await _accountsService.GetTokensByRefreshToken(refreshToken));
+    }
+    [Route("delete"), HttpDelete]
+    [ProducesResponseType((int)HttpStatusCode.OK)]
+    [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+    public async Task<IActionResult> DeleteAccount([FromHeader(Name = "X-AccessToken")] string accessToken)
+    {
+        await _accountsService.DeleteAccount(accessToken); 
+        return Ok(new { Message = "Account was been deleted" });
     }
 }

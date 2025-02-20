@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using FluentValidation;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -7,19 +8,31 @@ using Pinterest.Application.Commons.Exceptions;
 namespace Pinterest.Shared.Commons.Middlewares;
 
 public record class ExceptionMessage(string Title, string Errors);
-public class ExceptionsMiddleware(RequestDelegate next, ILogger<ExceptionsMiddleware> logger)
+internal class ExceptionsMiddleware(RequestDelegate next, ILogger<ExceptionsMiddleware> logger)
 {
     protected ILogger<ExceptionsMiddleware> Logger { get;  } = logger;
 
     public async Task Invoke(HttpContext context)
     {
-        try { await next(context); }
+        try { await next.Invoke(context); }
         catch (ProcessException error)
         {
-            Logger.LogWarning($"An exception occurred during the request: {error.GetType().Name}");
+            Logger.LogWarning($"An process exception occurred during the request: {error.GetType().Name}");
             Logger.LogWarning($"Exception message: {error.Message}");
-            
+
             await HandleExceptionAsync(context, error);
+        }
+        catch (ValidationException error)
+        {
+            Logger.LogWarning($"An validation exception occurred during the request: {error.GetType().Name}");
+            Logger.LogWarning($"Exception message: {error.Message}");
+
+            await HandleExceptionAsync(context, error);
+        }
+        catch (Exception error)
+        {
+            Logger.LogError($"An exception occurred during the request {error.GetType().Name}: {error.Message}");
+            Logger.LogError(error.StackTrace);
         }
     }
     protected virtual async Task HandleExceptionAsync(HttpContext context, Exception exception)
@@ -36,7 +49,7 @@ public class ExceptionsMiddleware(RequestDelegate next, ILogger<ExceptionsMiddle
 }
 public static class ExceptionsMiddlewareExtension
 {
-    public static IApplicationBuilder UseExceptionsHandler(this IApplicationBuilder builder)
+    internal static IApplicationBuilder UseExceptionsHandler(this IApplicationBuilder builder)
     {
         return builder.UseMiddleware<ExceptionsMiddleware>();
     }

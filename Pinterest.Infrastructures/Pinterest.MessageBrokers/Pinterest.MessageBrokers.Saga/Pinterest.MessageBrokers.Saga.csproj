@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\..\Pinterest.Applications\Pinterest.Application.Commons\Pinterest.Application.Commons.csproj" />
+      <ProjectReference Include="..\..\..\Pinterest.Domains\Pinterest.Domain.Core\Pinterest.Domain.Core.csproj" />
+      <ProjectReference Include="..\..\Pinterest.Documents\Pinterest.Documents.Mongo\Pinterest.Documents.Mongo.csproj" />
+      <ProjectReference Include="..\Pinterest.MessageBrokers.RabbitMQ\Pinterest.MessageBrokers.RabbitMQ.csproj" />
+    </ItemGroup>
+
+</Project>

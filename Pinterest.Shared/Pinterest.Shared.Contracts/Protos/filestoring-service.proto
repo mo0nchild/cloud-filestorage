@@ -1,0 +1,17 @@
+﻿syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Pinterest.Shared.Contracts.FileStoring";
+
+package fileStoring;
+
+service FileStoringService {
+  rpc ReserveFile(FileInfo) returns (EmptyResult);
+}
+
+message FileInfo {
+  string fileUuid = 1;
+}
+
+message EmptyResult { }

@@ -6,7 +6,7 @@ namespace Pinterest.Shared.Security.Configurations;
 
 public static class SchemeConfiguration
 {
-    public static AuthenticationBuilder AddUsersAuthentication(this AuthenticationBuilder builder, 
+    internal static AuthenticationBuilder AddUsersAuthentication(this AuthenticationBuilder builder, 
         Action<UsersAuthenticationOptions> configuration)
     {
         return builder.AddScheme<UsersAuthenticationOptions, UsersAuthenticationScheme>(

@@ -12,6 +12,12 @@ public class AccountsConfiguration : IEntityTypeConfiguration<AccountInfo>
         builder.HasIndex(item => item.Uuid).IsUnique();
         builder.HasIndex(item => item.Email).IsUnique();
         
+        builder.Property(item => item.RefreshToken).IsRequired(false);
         builder.Property(item => item.Email).HasMaxLength(100).IsRequired();
+        builder.Property(item => item.UserUuid).IsRequired();
+
+        builder.Property(item => item.Role).HasConversion(
+            value => value.ToString(),
+            value => (AccountRole)Enum.Parse(typeof(AccountRole), value));
     }
 }

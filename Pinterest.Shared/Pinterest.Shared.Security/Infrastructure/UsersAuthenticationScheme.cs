@@ -17,15 +17,14 @@ using Pinterest.Shared.Security.Settings;
 
 namespace Pinterest.Shared.Security.Infrastructure;
 
-public class UsersAuthenticationScheme : AuthenticationHandler<UsersAuthenticationOptions>
+internal class UsersAuthenticationScheme : AuthenticationHandler<UsersAuthenticationOptions>
 {
     private readonly ITokenService _tokenService;
-    protected ILogger<UsersAuthenticationScheme> Logger { get; }
+    private new ILogger<UsersAuthenticationScheme> Logger { get; }
     public UsersAuthenticationScheme(IOptionsMonitor<UsersAuthenticationOptions> options, 
         ILoggerFactory logger,
         UrlEncoder encoder,
-        ISystemClock clock,
-        ITokenService tokenService) : base(options, logger, encoder, clock)
+        ITokenService tokenService) : base(options, logger, encoder)
     {
         _tokenService = tokenService;
         Logger = logger.CreateLogger<UsersAuthenticationScheme>();

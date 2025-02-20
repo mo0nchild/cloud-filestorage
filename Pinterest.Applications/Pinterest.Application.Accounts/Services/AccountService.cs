@@ -8,31 +8,37 @@ using Pinterest.Application.Commons.Exceptions;
 using Pinterest.Application.Tokens.Interfaces;
 using Pinterest.Domain.Authorization.Entities;
 using Pinterest.Domain.Core.Factories;
+using Pinterest.Domain.Core.MessageBus;
+using Pinterest.Domain.Messages.AccountMessages;
 using Pinterest.Shared.Commons.Validations;
 
 namespace Pinterest.Application.Accounts.Services;
 
 using BCryptType = BCrypt.Net.BCrypt;
-public class AccountService : IAccountsService
+internal class AccountService : IAccountsService
 {
     private readonly RepositoryFactoryInterface<IAccountsRepository> _contextFactory;
     private readonly IMapper _mapper;
     private readonly ITokenService _tokenService;
-    private readonly IModelValidator<RegistrationModel> _registrationValidator;
+    private readonly IMessageProducer _messageProducer;
+    private readonly IModelValidator<CredentialsModel> _credentialsValidator;
 
     public AccountService(RepositoryFactoryInterface<IAccountsRepository> contextFactory, 
-        IMapper mapper, ITokenService tokenService, 
-        IModelValidator<RegistrationModel> registrationValidator)
+        IMapper mapper, ITokenService tokenService,
+        IMessageProducer messageProducer,
+        IModelValidator<CredentialsModel> credentialsValidator)
     {
         _contextFactory = contextFactory;
         _mapper = mapper;
         _tokenService = tokenService;
-        _registrationValidator = registrationValidator;
+        _messageProducer = messageProducer;
+        _credentialsValidator = credentialsValidator;
     }
     protected virtual Claim[] GenerateClaims(AccountModel model) => new Claim[]
     {
-        new Claim(ClaimTypes.PrimarySid, model.Uuid.ToString()),
+        new Claim(ClaimTypes.PrimarySid, model.UserUuid.ToString()),
         new Claim(ClaimTypes.Email, model.Email),
+        new Claim(ClaimTypes.Role, model.Role.ToString())
     };
     
     public async Task<IdentityModel> GetTokensByCredentials(CredentialsModel credentials)
@@ -52,12 +58,31 @@ public class AccountService : IAccountsService
 
         var profileClaims = GenerateClaims(_mapper.Map<AccountModel>(profile));
         var tokens = await _tokenService.CreateJwtTokens(profileClaims);
+        profile!.RefreshToken = tokens.RefreshToken;
+        await dbContext.SaveChangesAsync();
+        
+        return _mapper.Map<IdentityModel>(tokens);
+    }
+    public async Task<IdentityModel> GetTokensByRefreshToken(string refreshToken)
+    {
+        var userClaims = await _tokenService.VerifyRefreshToken(refreshToken);
+        var userUuid = userClaims?.FirstOrDefault(item => item.Type == ClaimTypes.PrimarySid);
+
+        ProcessException.ThrowIf(() => userClaims == null || userUuid == null, "Error in token validation");
+        using var dbContext = await _contextFactory.CreateRepositoryAsync();
+        
+        var profile = await dbContext.AccountInfos.FirstOrDefaultAsync(item => item.RefreshToken == refreshToken);
+
+        if (profile == null) throw new ProcessException("Account is not found");
+        var profileClaims = GenerateClaims(_mapper.Map<AccountModel>(profile));
+        var tokens = await _tokenService.CreateJwtTokens(profileClaims);
 
         var identityInstance = _mapper.Map<IdentityModel>(tokens);
+        profile.RefreshToken = identityInstance.RefreshToken;
+
         await dbContext.SaveChangesAsync();
         return identityInstance;
     }
-
     public async Task<AccountModel?> GetAccountByAccessToken(string accessToken)
     {
         var userClaims = await _tokenService.VerifyAccessToken(accessToken);
@@ -67,26 +92,43 @@ public class AccountService : IAccountsService
         using var dbContext = await _contextFactory.CreateRepositoryAsync();
         
         var userProfile = await dbContext.AccountInfos
-            .FirstOrDefaultAsync(item => item.Uuid == Guid.Parse(userUuid!.Value));
+            .FirstOrDefaultAsync(item => item.UserUuid == Guid.Parse(userUuid!.Value));
         if (userProfile == null)
         {
             throw new ProcessException($"Account does not exist");
         }
         return _mapper.Map<AccountModel>(userProfile);
     }
-    public async Task<IdentityModel> Registration(RegistrationModel registrationModel)
+    public async Task<Guid> CreateAccount(Guid userUuid, CredentialsModel credentials)
     {
-        var userRecord = _mapper.Map<AccountInfo>(registrationModel);
-        await _registrationValidator.CheckAsync(registrationModel);
+        await _credentialsValidator.CheckAsync(credentials);
+        
+        var userRecord = _mapper.Map<AccountInfo>(credentials);
+        userRecord.UserUuid = userUuid;
 
         using var dbContext = await _contextFactory.CreateRepositoryAsync();
-        var profileClaims = GenerateClaims(_mapper.Map<AccountModel>(userRecord));
-
-        var tokens = await _tokenService.CreateJwtTokens(profileClaims);
-
         await dbContext.AccountInfos.AddRangeAsync(userRecord);
+        
+        await dbContext.SaveChangesAsync();
+        return userRecord.Uuid;
+    }
+    public async Task DeleteAccount(string accessToken)
+    {
+        var userClaims = await _tokenService.VerifyAccessToken(accessToken);
+        var userEmail = userClaims?.FirstOrDefault(item => item.Type == ClaimTypes.Email);
+
+        AuthException.ThrowIf(() => userClaims == null || userEmail == null, "Token is not valid");
+        
+        using var dbContext = await _contextFactory.CreateRepositoryAsync();
+        var account = await dbContext.AccountInfos.FirstOrDefaultAsync(item => item.Email == userEmail!.Value);
+        
+        ProcessException.ThrowIf(() => account == null, "Account does not exist");
+        dbContext.AccountInfos.RemoveRange(account!);
         await dbContext.SaveChangesAsync();
         
-        return _mapper.Map<IdentityModel>(tokens);
+        await _messageProducer.SendToAllAsync(RemoveAccountMessage.RoutingPath, new RemoveAccountMessage()
+        {
+            UserUuid = account!.UserUuid
+        });
     }
 }

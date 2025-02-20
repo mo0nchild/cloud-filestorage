@@ -8,7 +8,7 @@ using RabbitMQ.Client;
 
 namespace Pinterest.MessageBrokers.RabbitMQ.Infrastructures;
 
-public class MessageProducer(IOptions<BrokerBaseSetting> brokerSetting, ILogger<MessageProducer> logger)
+internal class MessageProducer(IOptions<BrokerBaseSetting> brokerSetting, ILogger<MessageProducer> logger)
     : IMessageProducer, IAsyncDisposable
 {
     private readonly BrokerBaseSetting _brokerSetting = brokerSetting.Value;
@@ -47,6 +47,20 @@ public class MessageProducer(IOptions<BrokerBaseSetting> brokerSetting, ILogger<
         var jsonMessage = JsonConvert.SerializeObject(message);
         await _channel.BasicPublishAsync(exchange: string.Empty,
             routingKey: publishingPath,
+            body: Encoding.UTF8.GetBytes(jsonMessage));
+    }
+    public virtual async Task SendToAllAsync<TMessage>(string publishingPath, TMessage message) 
+        where TMessage : MessageBase
+    {
+        if (_channel == null) throw new NullReferenceException("Channel is null");
+        await _channel.ExchangeDeclareAsync(publishingPath, 
+            durable: false,
+            autoDelete: false,
+            type: "fanout",
+            arguments: null);
+        var jsonMessage = JsonConvert.SerializeObject(message);
+        await _channel.BasicPublishAsync(exchange: publishingPath,
+            routingKey: String.Empty, 
             body: Encoding.UTF8.GetBytes(jsonMessage));
     }
 }

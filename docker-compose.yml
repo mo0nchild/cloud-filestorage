@@ -52,6 +52,18 @@ services:
     volumes:
       - "./docker-volumes/postgres-data:/var/lib/postgresql/data"
       - "./init.sql:/docker-entrypoint-initdb.d/init.sql"
+
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: 1234567890
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./docker-volumes/mongo-data:/data/db
       
   rabbitmq:
     image: rabbitmq:3.10.7-management

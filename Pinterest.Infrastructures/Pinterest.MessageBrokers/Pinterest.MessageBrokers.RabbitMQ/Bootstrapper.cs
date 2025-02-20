@@ -12,8 +12,7 @@ public static class Bootstrapper
 {
     private static readonly string BrokerSection = "MessageBroker";
 
-    public static Task<IServiceCollection> AddProducerService(this IServiceCollection collection,
-        string queueName, IConfiguration configuration)
+    public static Task<IServiceCollection> AddProducerService(this IServiceCollection collection, IConfiguration configuration)
     {
         collection.Configure<BrokerBaseSetting>(configuration.GetSection(BrokerSection));
         collection.AddTransient<IMessageProducer, MessageProducer>(provider =>
@@ -27,21 +26,27 @@ public static class Bootstrapper
         });
         return Task.FromResult(collection);
     }
-
+    
     public static Task<IServiceCollection> AddConsumerListener<TMessage>(this IServiceCollection collection,
-        string queueName, IConfiguration configuration) where TMessage : MessageBase
+        RoutingOptions routingOptions, IConfiguration configuration) where TMessage : MessageBase
     {
         collection.Configure<BrokerBaseSetting>(configuration.GetSection(BrokerSection));
         collection.AddHostedService<ConsumerListener<TMessage>>(provider =>
         {
             var options = provider.GetRequiredService<IOptions<BrokerBaseSetting>>();
-            var consumer = provider.GetRequiredService<IMessageConsumer<TMessage>>();
             var logger = provider.GetRequiredService<ILogger<ConsumerListener<TMessage>>>();
+            var consumer = GetConsumer(provider, routingOptions.ConsumerTag);
             
-            var consumerListener = new ConsumerListener<TMessage>(queueName, consumer, options, logger);
+            var consumerListener = new ConsumerListener<TMessage>(routingOptions, consumer, options, logger);
             consumerListener.InitializeAsync().Wait();
             return consumerListener;
         });
         return Task.FromResult(collection);
+        IMessageConsumer<TMessage> GetConsumer(IServiceProvider provider, string? consumerName = null)
+        {
+            return consumerName != null
+                ? provider.GetRequiredKeyedService<IMessageConsumer<TMessage>>(consumerName) 
+                : provider.GetRequiredService<IMessageConsumer<TMessage>>();
+        }
     }
 }

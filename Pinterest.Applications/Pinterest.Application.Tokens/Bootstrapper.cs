@@ -1,20 +1,20 @@
 ﻿using System.Collections.ObjectModel;
+using System.Text.Json;
+using AutoMapper;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Pinterest.Application.Tokens.Interfaces;
 using Pinterest.Application.Tokens.Services;
 using Pinterest.Domain.Authorization.Settings;
+using Pinterest.Shared.Contracts;
 
 namespace Pinterest.Application.Tokens;
 
 public static class Bootstrapper
 {
-    private static readonly string TokenSection = "Tokens";
-    public static Task<IServiceCollection> AddTokensServices(this IServiceCollection collection,
-        IConfiguration configuration)
+    public static Task<IServiceCollection> AddTokensServices(this IServiceCollection serviceCollection, IConfiguration configuration)
     {
-        collection.Configure<TokenOptions>(configuration.GetSection(TokenSection));
-        collection.AddTransient<ITokenService, TokenService>();
-        return Task.FromResult(collection);
+        serviceCollection.AddTransient<ITokenService, TokenService>();
+        return Task.FromResult(serviceCollection);
     }
 }

@@ -8,9 +8,10 @@ namespace Pinterest.Application.Accounts;
 
 public static class Bootstrapper
 {
-    public static Task<IServiceCollection> AddAccountServices(this IServiceCollection collection)
+    public static Task<IServiceCollection> AddAccountServices(this IServiceCollection serviceCollection)
     {
-        collection.AddTransient<IAccountsService, AccountService>();
-        return Task.FromResult(collection);
+        serviceCollection.AddTransient<IAccountsService, AccountService>();
+        serviceCollection.AddTransient<IRegistrateAccount, RegistrateAccount>();
+        return Task.FromResult(serviceCollection);
     }
 }

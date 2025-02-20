@@ -43,6 +43,16 @@ namespace Pinterest.Database.Accounts.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<string>("RefreshToken")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("UserUuid")
+                        .HasColumnType("uuid");
+
                     b.HasKey("Uuid");
 
                     b.HasIndex("Email")

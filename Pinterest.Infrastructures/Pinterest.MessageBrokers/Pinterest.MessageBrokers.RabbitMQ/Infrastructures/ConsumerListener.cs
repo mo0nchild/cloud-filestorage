@@ -13,18 +13,18 @@ namespace Pinterest.MessageBrokers.RabbitMQ.Infrastructures;
 public class ConsumerListener<TMessage> : BackgroundService, IAsyncDisposable
     where TMessage : MessageBase
 {
+    private readonly RoutingOptions _routingOptions;
     private readonly IMessageConsumer<TMessage> _consumer;
-    private readonly string _queueName;
     private readonly BrokerBaseSetting _brokerSetting;
 
     private IConnection? _connection;
     private IChannel? _channel;
     public ILogger<ConsumerListener<TMessage>> Logger { get; private set; }
-    public ConsumerListener(string queueName, IMessageConsumer<TMessage> consumer, 
+    public ConsumerListener(RoutingOptions routingOptions, IMessageConsumer<TMessage> consumer, 
         IOptions<BrokerBaseSetting> brokerSetting,
         ILogger<ConsumerListener<TMessage>> logger)
     {
-        _queueName = queueName;
+        _routingOptions = routingOptions;
         _consumer = consumer;
         _brokerSetting = brokerSetting.Value;
         Logger = logger;
@@ -47,11 +47,19 @@ public class ConsumerListener<TMessage> : BackgroundService, IAsyncDisposable
         };
         _connection = await factory.CreateConnectionAsync();
         _channel = await _connection.CreateChannelAsync();
-        await _channel.QueueDeclareAsync(queue: _queueName,
+        
+        await _channel.QueueDeclareAsync(queue: _routingOptions.QueueName,
             durable: false,
             exclusive: false,
             autoDelete: false,
             arguments: null);
+        if (_routingOptions.ExchangeName != null)
+        {
+            await _channel.ExchangeDeclareAsync(exchange: _routingOptions.ExchangeName, type: "fanout");
+            await _channel.QueueBindAsync(queue: _routingOptions.QueueName, 
+                exchange: _routingOptions.ExchangeName, 
+                routingKey: string.Empty);
+        }
     }
     public virtual async ValueTask DisposeAsync()
     {
@@ -69,10 +77,15 @@ public class ConsumerListener<TMessage> : BackgroundService, IAsyncDisposable
             var messageObject = JsonConvert.DeserializeObject<TMessage>(message);
             if (messageObject != null)
             {
-                await _consumer.ConsumeAsync(messageObject);
+                try { await _consumer.ConsumeAsync(messageObject); }
+                catch (Exception error)
+                {
+                    Logger.LogError(error, $"Error consuming message: {error.Message}");
+                }
             }
+            else Logger.LogWarning("Received message but could not be deserialized");
         };
-        await _channel.BasicConsumeAsync(queue: _queueName,
+        await _channel.BasicConsumeAsync(queue: _routingOptions.QueueName,
             autoAck: true,
             consumer: consumer);
     }

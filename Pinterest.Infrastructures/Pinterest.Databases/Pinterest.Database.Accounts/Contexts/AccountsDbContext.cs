@@ -5,11 +5,9 @@ using Pinterest.Domain.Authorization.Entities;
 
 namespace Pinterest.Database.Accounts.Contexts;
 
-public class AccountsDbContext : DbContext, IAccountsRepository
+public class AccountsDbContext(DbContextOptions<AccountsDbContext> options) : DbContext(options), IAccountsRepository
 {
-    public DbSet<AccountInfo> AccountInfos { get; set; }
-    
-    public AccountsDbContext(DbContextOptions<AccountsDbContext> options) : base(options) { }
+    public virtual DbSet<AccountInfo> AccountInfos { get; set; }
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         base.OnConfiguring(optionsBuilder.UseLazyLoadingProxies());

@@ -11,7 +11,7 @@ public static class RepositoryFactoryHelper
         where TContext : DbContext, TRepository
         where TRepository : IBaseRepository
     {
-        collection.AddScoped<RepositoryFactoryInterface<TRepository>>(services =>
+        collection.AddTransient<RepositoryFactoryInterface<TRepository>>(services =>
         {
             var factory = services.GetService<IDbContextFactory<TContext>>();
             if(factory == null) throw new NullReferenceException($"{nameof(IDbContextFactory<TContext>)} not found");

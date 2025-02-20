@@ -15,6 +15,7 @@
     </ItemGroup>
     <ItemGroup>
       <ProjectReference Include="..\..\Pinterest.Domains\Pinterest.Domain.Authorization\Pinterest.Domain.Authorization.csproj" />
+      <ProjectReference Include="..\..\Pinterest.Domains\Pinterest.Domain.Messages\Pinterest.Domain.Messages.csproj" />
       <ProjectReference Include="..\..\Pinterest.Shared\Pinterest.Shared.Commons\Pinterest.Shared.Commons.csproj" />
       <ProjectReference Include="..\Pinterest.Application.Tokens\Pinterest.Application.Tokens.csproj" />
     </ItemGroup>

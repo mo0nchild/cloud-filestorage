@@ -14,5 +14,6 @@ public interface IFileManager
     Task RejectMultipartUpload(string uploadId, StoringFileInfo fileInfo);
     
     Task<FileMetadata> GetFileMetadata(StoringFileInfo fileInfo);
+    Task<string> GetFileUrl(StoringFileInfo fileInfo);
     Task<Stream> GetFileStream(StoringFileInfo fileInfo, FileRangeInfo? fileRangeInfo);
 }

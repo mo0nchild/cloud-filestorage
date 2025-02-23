@@ -10,6 +10,7 @@ using Pinterest.Domain.Messages.FileStorageMessages;
 using Pinterest.MessageBrokers.RabbitMQ;
 using Pinterest.MessageBrokers.RabbitMQ.Settings;
 using Pinterest.S3Storage.Minio;
+using Pinterest.S3Storage.VideoProcessing;
 using Pinterest.Shared.Commons.Configurations;
 
 namespace Pinterest.Api.FileStorage.Configurations;
@@ -22,7 +23,7 @@ public static class ApiServicesConfigurations
     {
         await serviceCollection.AddS3StorageService(configuration);
         await serviceCollection.AddFileStorageServices(configuration);
-        
+        await serviceCollection.AddVideoProcessingServices(configuration);
         await serviceCollection.AddProducerService(configuration);
         
         await MessageConsumerRegistator.Registrate<DeleteFileConsumer, FileRemovedMessage>(serviceCollection);

@@ -1,3 +1,4 @@
+using System.Net;
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Bson.Serialization.IdGenerators;
 using Pinterest.Application.FileStorage.Interfaces;
@@ -9,29 +10,34 @@ namespace Pinterest.Api.FileStorage.Controllers;
 public class FileStorageController : ControllerBase
 {
     private readonly IFileStorageService _fileStorageService;
-
-    public FileStorageController(ILogger<FileStorageController> logger, IFileStorageService fileStorageService)
+    public FileStorageController(IFileStorageService fileStorageService, ILogger<FileStorageController> logger)
     {
         _fileStorageService = fileStorageService;
         Logger = logger;
     }
-    public ILogger<FileStorageController> Logger { get; }
+    private ILogger<FileStorageController> Logger { get; }
 
     [HttpPost, Route("initialize")]
+    [ProducesResponseType((int)HttpStatusCode.OK)]
+    [ProducesResponseType((int)HttpStatusCode.BadRequest)]
     public async Task<IActionResult> InitializeUpload([FromQuery] NewFileInfo fileInfo)
     {
-        return Ok(await _fileStorageService.InitializeUpload(fileInfo));
+        return Ok(new { FileUuid = await _fileStorageService.InitializeUpload(fileInfo) });
     }
     [HttpPost, Route("uploadFile")]
+    [ProducesResponseType((int)HttpStatusCode.OK)]
+    [ProducesResponseType((int)HttpStatusCode.BadRequest)]
     public async Task<IActionResult> UploadFile([FromQuery] NewFileInfo fileInfo)
     {
         using var fileStream = new MemoryStream();
         await Request.Body.CopyToAsync(fileStream);
         fileStream.Seek(0, SeekOrigin.Begin);
 
-        return Ok(await _fileStorageService.UploadFile(fileInfo, fileStream));
+        return Ok(new { FileUuid = await _fileStorageService.UploadFile(fileInfo, fileStream) });
     }
     [HttpPost, Route("uploadPart")]
+    [ProducesResponseType(typeof(PartInfo), (int)HttpStatusCode.OK)]
+    [ProducesResponseType((int)HttpStatusCode.BadRequest)]
     public async Task<IActionResult> UploadChunk([FromQuery] Guid fileUuid, [FromQuery] int partNumber)
     {
         using var chunkStream = new MemoryStream();
@@ -47,9 +53,11 @@ public class FileStorageController : ControllerBase
         return Ok(uploadResult);
     }
     [HttpPost, Route("complete")]
+    [ProducesResponseType((int)HttpStatusCode.OK)]
+    [ProducesResponseType((int)HttpStatusCode.BadRequest)]
     public async Task<IActionResult> CompleteUpload([FromBody] CompleteUploadInfo completeInfo)
     {
         await _fileStorageService.CompleteUpload(completeInfo);
-        return Ok("File uploaded successfully");
+        return Ok(new { Message = "File uploaded successfully" });
     }
 }

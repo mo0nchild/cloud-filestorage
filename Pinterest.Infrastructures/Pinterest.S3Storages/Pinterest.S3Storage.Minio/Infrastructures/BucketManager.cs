@@ -9,7 +9,7 @@ using BucketAlreadyExistsException = Amazon.S3.Model.BucketAlreadyExistsExceptio
 
 namespace Pinterest.S3Storage.Minio.Infrastructures;
 
-public class BucketManager(IAmazonS3 s3Client, ILogger<FileManager> logger) : IBucketManager
+internal class BucketManager(IAmazonS3 s3Client, ILogger<FileManager> logger) : IBucketManager
 {
     private readonly IAmazonS3 _s3Client = s3Client;
 

@@ -26,6 +26,7 @@
       <ProjectReference Include="..\..\Pinterest.Infrastructures\Pinterest.Documents\Pinterest.Documents.Mongo\Pinterest.Documents.Mongo.csproj" />
       <ProjectReference Include="..\..\Pinterest.Infrastructures\Pinterest.MessageBrokers\Pinterest.MessageBrokers.RabbitMQ\Pinterest.MessageBrokers.RabbitMQ.csproj" />
       <ProjectReference Include="..\..\Pinterest.Infrastructures\Pinterest.S3Storages\Pinterest.S3Storage.Minio\Pinterest.S3Storage.Minio.csproj" />
+      <ProjectReference Include="..\..\Pinterest.Infrastructures\Pinterest.S3Storages\Pinterest.S3Storage.VideoProcessing\Pinterest.S3Storage.VideoProcessing.csproj" />
       <ProjectReference Include="..\..\Pinterest.Shared\Pinterest.Shared.Commons\Pinterest.Shared.Commons.csproj" />
       <ProjectReference Include="..\..\Pinterest.Shared\Pinterest.Shared.Security\Pinterest.Shared.Security.csproj" />
     </ItemGroup>

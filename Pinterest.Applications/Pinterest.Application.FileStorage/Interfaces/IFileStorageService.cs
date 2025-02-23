@@ -14,7 +14,7 @@ public interface IFileStorageService
     Task DeleteFile(Guid fileUuid);
     Task SetFileIsUsing(Guid fileUuid);
     
-    Task<FileMetadata> GetFileMetadata(Guid fileUuid);
+    Task<FileBasicInfo> GetFileMetadata(Guid fileUuid);
     Task<Stream> GetFileData(Guid fileUuid, FileRangeInfo? rangeInfo = default);
     
     Task RemoveNotUsingFiles();

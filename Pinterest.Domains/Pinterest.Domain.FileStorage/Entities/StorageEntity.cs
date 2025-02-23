@@ -11,8 +11,14 @@ public class StorageEntity : BaseEntity
     public string BucketName { get; set; } = string.Empty;
 
     public long? FileSize { get; set; } = default;
+    public string ContentType { get; set; } = string.Empty;
+    public ThumbnailFile? Thumbnail { get; set; } = default;
     
     public string UploadId { get; set; } = string.Empty;
     public bool IsUsing { get; set; } = default;
     public bool IsUploaded { get; set; } = default;
+}
+public class ThumbnailFile
+{
+    public string FileName { get; set; } = string.Empty;
 }

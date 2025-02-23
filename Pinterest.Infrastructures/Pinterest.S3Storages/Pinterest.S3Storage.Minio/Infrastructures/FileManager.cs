@@ -16,7 +16,7 @@ using Pinterest.Application.FileStorage.Models;
 namespace Pinterest.S3Storage.Minio.Infrastructures;
 
 [SuppressMessage("ReSharper", "MemberCanBePrivate.Global")]
-public class FileManager(IAmazonS3 s3Client, ILogger<FileManager> logger) : IFileManager
+internal class FileManager(IAmazonS3 s3Client, ILogger<FileManager> logger) : IFileManager
 {
     private readonly IAmazonS3 _s3Client = s3Client;
     protected ILogger<FileManager> Logger { get; } = logger;
@@ -135,6 +135,24 @@ public class FileManager(IAmazonS3 s3Client, ILogger<FileManager> logger) : IFil
                 Key = fileInfo.FileName
             });
             return new FileMetadata(response.ContentLength, response.Headers["Content-Type"]);
+        }
+        catch (AmazonS3Exception error) when (error.StatusCode == HttpStatusCode.NotFound)
+        {
+            Logger.LogError($"File {fileInfo.FileName} not found. Message: '{error.Message}'");
+            throw new ProcessException($"File {fileInfo.Bucket}/{fileInfo.FileName} not found");
+        }
+    }
+    public async Task<string> GetFileUrl(StoringFileInfo fileInfo)
+    {
+        try {
+            var presignedUrl = await _s3Client.GetPreSignedURLAsync(new GetPreSignedUrlRequest()
+            {
+                BucketName = fileInfo.Bucket,
+                Key = fileInfo.FileName,
+                Expires = DateTime.UtcNow.AddMinutes(5),
+                Verb = HttpVerb.GET,
+            });
+            return presignedUrl.Replace("https://", "http://");
         }
         catch (AmazonS3Exception error) when (error.StatusCode == HttpStatusCode.NotFound)
         {

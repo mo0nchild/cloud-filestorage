@@ -16,6 +16,7 @@ public static class Bootstrapper
     {
         serviceCollection.Configure<StorageSettings>(configuration.GetSection(StorageSettingsSection));
         serviceCollection.AddTransient<IFileStorageService, FileStorageService>();
+        serviceCollection.AddTransient<IThumbnailService, ThumbnailService>();
         serviceCollection.AddTransient<IFileStorageValidators, FileStorageValidators>();
         
         using var serviceScope = serviceCollection.BuildServiceProvider().CreateScope();

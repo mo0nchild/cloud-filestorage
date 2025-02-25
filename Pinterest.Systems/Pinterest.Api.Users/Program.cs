@@ -1,4 +1,5 @@
 using Pinterest.Api.Users.Configurations;
+using Pinterest.Api.Users.Services;
 using Pinterest.Shared.Commons;
 using Pinterest.Shared.Commons.Configurations;
 using Pinterest.Shared.Commons.Middlewares;
@@ -13,6 +14,7 @@ public static class Program
     {
         var builder = WebApplication.CreateBuilder(args);
         builder.Services.AddControllers();
+        builder.Services.AddGrpc().AddJsonTranscoding();
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddHealthChecks();
 
@@ -32,6 +34,7 @@ public static class Program
         application.UseSecurity();
         
         application.UseHealthChecks("/health");
+        application.MapGrpcService<AuthorSubscribersServiceImpl>();
         application.MapControllers();
         await application.RunAsync();
     }

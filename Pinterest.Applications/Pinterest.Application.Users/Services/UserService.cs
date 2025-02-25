@@ -5,10 +5,12 @@ using Pinterest.Application.Commons.Exceptions;
 using Pinterest.Application.Users.Infrastructures;
 using Pinterest.Application.Users.Interfaces;
 using Pinterest.Application.Users.Models;
+using Pinterest.Application.Users.Models.UserBasicInfo;
 using Pinterest.Application.Users.Repositories;
 using Pinterest.Domain.Core.Factories;
 using Pinterest.Domain.Core.MessageBus;
 using Pinterest.Domain.Messages.FileStorageMessages;
+using Pinterest.Domain.Messages.UsersMessages;
 using Pinterest.Domain.Users.Entities;
 using Pinterest.Shared.Commons.Validations;
 
@@ -54,7 +56,11 @@ internal class UserService : IUserService
         
         await dbContext.Users.AddRangeAsync(mappedUserInfo);
         await dbContext.SaveChangesAsync();
-        
+
+        await _messageProducer.SendToAllAsync(CreatedUserMessage.RoutingPath, new CreatedUserMessage()
+        {
+            UserUuid = mappedUserInfo.Uuid,
+        });
         return mappedUserInfo.Uuid;
     }
     public async Task DeleteUserAsync(Guid userUuid)
@@ -66,6 +72,10 @@ internal class UserService : IUserService
 
         dbContext.Users.RemoveRange(user);
         await dbContext.SaveChangesAsync();
+        await _messageProducer.SendToAllAsync(RemoveUserMessage.RoutingPath, new RemoveUserMessage()
+        {
+            UserUuid = user.Uuid
+        });
     }
     public async Task UpdateUserAsync(UpdateUserInfo userInfo)
     {

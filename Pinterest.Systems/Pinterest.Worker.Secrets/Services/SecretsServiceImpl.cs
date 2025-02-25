@@ -1,4 +1,5 @@
 using AutoMapper;
+using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
 using Pinterest.Domain.Authorization.Settings;
 using Pinterest.Shared.Contracts;

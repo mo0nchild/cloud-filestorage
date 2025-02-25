@@ -1,12 +1,16 @@
 using System.Net;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Bson.Serialization.IdGenerators;
 using Pinterest.Application.FileStorage.Interfaces;
 using Pinterest.Application.FileStorage.Models;
+using Pinterest.Shared.Security.Models;
+using Pinterest.Shared.Security.Settings;
 
 namespace Pinterest.Api.FileStorage.Controllers;
 
 [ApiController, Route("fileStorage")]
+[Authorize(SecurityInfo.User, AuthenticationSchemes = UsersAuthenticationOptions.DefaultScheme)]
 public class FileStorageController : ControllerBase
 {
     private readonly IFileStorageService _fileStorageService;

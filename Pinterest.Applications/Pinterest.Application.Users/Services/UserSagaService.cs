@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Pinterest.Application.Users.Interfaces;
 using Pinterest.Application.Users.Models;
+using Pinterest.Application.Users.Models.UserBasicInfo;
 using Pinterest.Domain.Core.Transactions;
 using Pinterest.Domain.Messages.SagaMessages.CreateAccountSaga;
 using Pinterest.Domain.Users.Entities;

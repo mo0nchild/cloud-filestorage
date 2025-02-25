@@ -12,7 +12,7 @@ public static class Program
         var builder = WebApplication.CreateBuilder(args);
         
         builder.Services.AddControllers();
-        builder.Services.AddGrpc();
+        builder.Services.AddGrpc().AddJsonTranscoding();
         builder.Services.AddHealthChecks();
         await builder.Services.AddSecretsStorageServices(builder.Configuration);
         await builder.Services.AddCoreConfiguration(builder.Configuration);
@@ -22,6 +22,11 @@ public static class Program
         {
             var secretsService = scope.ServiceProvider.GetRequiredService<SecretsAccessService>();
             await secretsService.SendNewSecretsNotification();
+        }
+        if (application.Environment.IsDevelopment())
+        {
+            application.UseSwagger();
+            application.UseSwaggerUI();
         }
         application.UseCoreConfiguration();
         application.UseHealthChecks("/health");

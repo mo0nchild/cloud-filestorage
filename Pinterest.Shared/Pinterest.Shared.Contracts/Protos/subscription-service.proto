@@ -1,0 +1,26 @@
+﻿syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
+import "google/api/annotations.proto";
+
+option csharp_namespace = "Pinterest.Shared.Contracts.Subscriptions";
+
+package subscriptions;
+
+service AuthorSubscribersService {
+  rpc GetSubscribers(AuthorInfo) returns (SubscribersResult) {
+    option (google.api.http) = {
+      get: "/users/subscribers";
+    };
+  }
+}
+message AuthorInfo {
+  string authorUuid = 1;
+}
+message SubscriberInfo {
+  string userUuid = 1;
+}
+message SubscribersResult {
+  repeated SubscriberInfo subscribers = 1;
+}

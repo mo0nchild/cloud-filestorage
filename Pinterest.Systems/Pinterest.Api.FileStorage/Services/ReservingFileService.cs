@@ -1,10 +1,14 @@
-﻿using Grpc.Core;
+﻿using Google.Protobuf.WellKnownTypes;
+using Grpc.Core;
+using Microsoft.AspNetCore.Authorization;
 using Pinterest.Application.Commons.Exceptions;
 using Pinterest.Application.FileStorage.Interfaces;
 using Pinterest.Shared.Contracts;
 using Pinterest.Shared.Contracts.FileStoring;
 using FileInfo = Pinterest.Shared.Contracts.FileStoring.FileInfo;
 using Pinterest.Shared.Contracts.Secrets;
+using Pinterest.Shared.Security.Models;
+using Pinterest.Shared.Security.Settings;
 
 namespace Pinterest.Api.FileStorage.Services;
 
@@ -18,10 +22,11 @@ public class ReservingFileService : FileStoringService.FileStoringServiceBase
         _fileStorageService = fileStorageService;
     }
     private ILogger<ReservingFileService> Logger { get; }
-
-    public override async Task<EmptyResult> ReserveFile(FileInfo request, ServerCallContext context)
+    
+    [Authorize(SecurityInfo.User, AuthenticationSchemes = UsersAuthenticationOptions.DefaultScheme)]
+    public override async Task<Empty> ReserveFile(FileInfo request, ServerCallContext context)
     {
-        if (Guid.TryParse(request.FileUuid, out var guid))
+        if (!Guid.TryParse(request.FileUuid, out var guid))
         {
             throw new RpcException(new Status(StatusCode.InvalidArgument, "Invalid GUID"));
         }
@@ -34,6 +39,6 @@ public class ReservingFileService : FileStoringService.FileStoringServiceBase
             Logger.LogError($"Failing reserve file {request.FileUuid}: {error.Message}");
             throw new RpcException(new Status(StatusCode.NotFound, error.Message));
         }
-        return new EmptyResult();
+        return new Empty();
     }
 }

@@ -1,8 +1,8 @@
 ﻿using Pinterest.Application.Users.Interfaces;
-using Pinterest.Application.Users.Models;
+using Pinterest.Application.Users.Models.UserBasicInfo;
 using Pinterest.Shared.Commons.Validations;
 
-namespace Pinterest.Application.Users.Services.Validators;
+namespace Pinterest.Application.Users.Services;
 
 internal class UserValidators : IUserValidators
 {

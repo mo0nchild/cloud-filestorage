@@ -1,4 +1,4 @@
-﻿namespace Pinterest.Application.Users.Models;
+﻿namespace Pinterest.Application.Users.Models.UserBasicInfo;
 
 public class UserImageInfo
 {

@@ -1,14 +1,18 @@
 ﻿using System.Net;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.Options;
 using Pinterest.Application.FileStorage.Interfaces;
 using Pinterest.Application.FileStorage.Models;
 using Pinterest.Domain.FileStorage.Settings;
+using Pinterest.Shared.Security.Models;
+using Pinterest.Shared.Security.Settings;
 
 namespace Pinterest.Api.FileStorage.Controllers;
 
 [ApiController, Route("fileAccess")]
+[Authorize(SecurityInfo.User, AuthenticationSchemes = UsersAuthenticationOptions.DefaultScheme)]
 public class FileAccessController : ControllerBase
 {
     private readonly FileExtensionContentTypeProvider _contentTypeProvider = new(); 

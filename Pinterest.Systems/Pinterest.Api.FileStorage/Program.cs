@@ -14,10 +14,12 @@ public static class Program
 
         builder.Services.AddControllers();
         builder.Services.AddEndpointsApiExplorer();
+ 
         builder.Services.AddHealthChecks();
-        builder.Services.AddGrpc();
+        builder.Services.AddGrpc().AddJsonTranscoding();
         builder.Services.AddHostedService<CleaningHostedService>();
         
+        await builder.Services.AddSecurityServices(builder.Configuration);
         await builder.Services.AddCoreConfiguration(builder.Configuration);
         await builder.Services.AddApiServices(builder.Configuration);
         await builder.Services.AddSecretService(builder.Configuration);
@@ -30,7 +32,9 @@ public static class Program
         }
         application.UseHttpsRedirection();
         application.UseCoreConfiguration();
+        application.UseSecurity();
         
+        application.UseHealthChecks("/health");
         application.MapGrpcService<ReservingFileService>();
         application.MapControllers();
 

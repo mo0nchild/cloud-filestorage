@@ -23,6 +23,7 @@
         <PackageReference Include="Swashbuckle.AspNetCore.Newtonsoft" Version="6.7.3" />
         <PackageReference Include="Swashbuckle.AspNetCore.Filters" Version="8.0.2" />
         <PackageReference Include="Swashbuckle.AspNetCore.Filters.Abstractions" Version="8.0.2" />
+        
         <PackageReference Include="Microsoft.AspNetCore.Grpc.Swagger" Version="0.8.0" />
     </ItemGroup>
 

@@ -1,4 +1,5 @@
 ﻿using Pinterest.Application.Users.Models;
+using Pinterest.Application.Users.Models.UserBasicInfo;
 
 namespace Pinterest.Application.Users.Interfaces;
 

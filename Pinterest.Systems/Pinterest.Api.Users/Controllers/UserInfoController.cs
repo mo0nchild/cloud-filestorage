@@ -7,6 +7,7 @@ using Pinterest.Api.Users.Requests;
 using Pinterest.Application.Commons.Exceptions;
 using Pinterest.Application.Users.Interfaces;
 using Pinterest.Application.Users.Models;
+using Pinterest.Application.Users.Models.UserBasicInfo;
 using Pinterest.Shared.Commons.Helpers;
 using Pinterest.Shared.Security.Models;
 using Pinterest.Shared.Security.Settings;
@@ -19,8 +20,7 @@ public class UserInfoController : ControllerBase
     private readonly IUserService _userService;
     private readonly IMapper _mapper;
 
-    public UserInfoController(IUserService userService, IMapper mapper,
-        ILogger<UserInfoController> logger)
+    public UserInfoController(IUserService userService, IMapper mapper, ILogger<UserInfoController> logger)
     {
         Logger = logger;
         _userService = userService;

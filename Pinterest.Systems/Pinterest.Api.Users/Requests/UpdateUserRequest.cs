@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Pinterest.Application.Users.Models;
+using Pinterest.Application.Users.Models.UserBasicInfo;
 
 namespace Pinterest.Api.Users.Requests;
 

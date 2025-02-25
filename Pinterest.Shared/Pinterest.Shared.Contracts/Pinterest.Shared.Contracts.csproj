@@ -4,15 +4,20 @@
         <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <IncludeHttpRuleProtos>true</IncludeHttpRuleProtos>
+        <ProtoRoot>Protos</ProtoRoot>
     </PropertyGroup>
 
     <ItemGroup>
-        <Protobuf Include="Protos\*.proto" />
+        <Protobuf Include="Protos/*.proto" ProtoRoot="Protos"/>
+        <Protobuf Include="Protos/google/api/annotations.proto" ProtoRoot="Protos" GrpcServices="None" />
+        <Protobuf Include="Protos/google/api/http.proto" ProtoRoot="Protos" GrpcServices="None"  />
     </ItemGroup>
 
     <ItemGroup>
       <PackageReference Include="Google.Protobuf" Version="3.29.3" />
       <PackageReference Include="Grpc.Core" Version="2.46.6" />
+      <PackageReference Include="Grpc.Core.Api" Version="2.67.0" />
       <PackageReference Include="Grpc.Tools" Version="2.69.0">
         <PrivateAssets>all</PrivateAssets>
         <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

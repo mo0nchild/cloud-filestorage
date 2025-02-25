@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Pinterest.Domain.Users.Entities;
 
-namespace Pinterest.Application.Users.Models;
+namespace Pinterest.Application.Users.Models.UserBasicInfo;
 
 public class UserInfo
 {

@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
@@ -7,10 +8,13 @@ using Pinterest.Application.FileStorage.Infrastructures.Models;
 using Pinterest.Application.FileStorage.Interfaces;
 using Pinterest.Application.FileStorage.Models;
 using Pinterest.Domain.FileStorage.Settings;
+using Pinterest.Shared.Security.Models;
+using Pinterest.Shared.Security.Settings;
 
 namespace Pinterest.Api.FileStorage.Controllers;
 
 [ApiController, Route("thumbnail")]
+[Authorize(SecurityInfo.User, AuthenticationSchemes = UsersAuthenticationOptions.DefaultScheme)]
 public class ThumbnailController : ControllerBase
 {
     private readonly FileExtensionContentTypeProvider _contentTypeProvider = new(); 

@@ -1,6 +1,6 @@
 ﻿using Pinterest.Domain.Core.Models;
 
-namespace Pinterest.Domain.Users.Entities;
+namespace Pinterest.Domain.CommonModels.Models;
 
 public class ValidPostInfo : BaseEntity
 {

@@ -89,6 +89,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pinterest.GrpcServices.User
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pinterest.S3Storage.VideoProcessing", "Pinterest.Infrastructures\Pinterest.S3Storages\Pinterest.S3Storage.VideoProcessing\Pinterest.S3Storage.VideoProcessing.csproj", "{B29330D0-07EA-477C-BFC6-C62C049F9125}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pinterest.Domain.CommonModels", "Pinterest.Domains\Pinterest.Domain.CommonModels\Pinterest.Domain.CommonModels.csproj", "{268B3227-3CA8-4B29-B1CE-C19610CB4007}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -223,6 +225,10 @@ Global
 		{B29330D0-07EA-477C-BFC6-C62C049F9125}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B29330D0-07EA-477C-BFC6-C62C049F9125}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B29330D0-07EA-477C-BFC6-C62C049F9125}.Release|Any CPU.Build.0 = Release|Any CPU
+		{268B3227-3CA8-4B29-B1CE-C19610CB4007}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{268B3227-3CA8-4B29-B1CE-C19610CB4007}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{268B3227-3CA8-4B29-B1CE-C19610CB4007}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{268B3227-3CA8-4B29-B1CE-C19610CB4007}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{25C526CA-6320-4AA6-89B8-ACC5CF62CB06} = {532F629A-68F5-4E4F-BC59-F08882D1C3E3}
@@ -262,5 +268,6 @@ Global
 		{462EB655-EC5A-4392-A6C0-0FDD87B27925} = {C0F10CF5-1B71-4E96-81C2-7524B08C0745}
 		{F563E5A7-DE11-4DBF-B901-3F31C7AFC8DC} = {C0F10CF5-1B71-4E96-81C2-7524B08C0745}
 		{B29330D0-07EA-477C-BFC6-C62C049F9125} = {FB1ABACE-F0DA-407B-86E6-99B01639C700}
+		{268B3227-3CA8-4B29-B1CE-C19610CB4007} = {E79F92FA-D7F7-43ED-BF42-DA4DF7B2EA73}
 	EndGlobalSection
 EndGlobal

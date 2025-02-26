@@ -25,7 +25,9 @@ public static class IdentityConfiguration
             if (isGrpc) return true;
             
             return httpContext.User.Identity?.IsAuthenticated == true 
-                   && httpContext.User.IsInRole(SecurityRole.User.ToString());
+                   && (httpContext.User.IsInRole(SecurityRole.User.ToString()) 
+                   || httpContext.User.IsInRole(SecurityRole.Moderator.ToString())
+                   || httpContext.User.IsInRole(SecurityRole.Admin.ToString()));
         });
     }
     internal static Task<IServiceCollection> AddIdentityServices(this IServiceCollection serviceCollection,

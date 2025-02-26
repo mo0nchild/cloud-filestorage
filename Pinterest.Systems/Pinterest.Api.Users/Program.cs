@@ -19,7 +19,7 @@ public static class Program
         builder.Services.AddHealthChecks();
 
         await builder.Services.AddSecurityServices(builder.Configuration);
-        await builder.Services.AddApiServices(builder.Configuration);
+        await builder.Services.AddUsersApiServices(builder.Configuration);
         await builder.Services.AddCoreConfiguration(builder.Configuration);
         await builder.Services.AddSecretService(builder.Configuration);
 

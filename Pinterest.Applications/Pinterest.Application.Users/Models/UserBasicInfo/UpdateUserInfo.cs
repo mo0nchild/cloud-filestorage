@@ -18,6 +18,7 @@ public class UpdateUserInfoValidator : AbstractValidator<UpdateUserInfo>
     {
         RuleFor(item => item.Username)
             .NotEmpty().WithMessage("Username is required")
+            .MaximumLength(50).WithMessage("Username must not exceed 50 characters")
             .MustAsync(async (@object, value, _) =>
             {
                 using var dbContext = await repositoryFactory.CreateRepositoryAsync();
@@ -27,5 +28,7 @@ public class UpdateUserInfoValidator : AbstractValidator<UpdateUserInfo>
             }).WithMessage("Username already exists");
         RuleFor(item => item.UserUuid)
             .NotEmpty().WithMessage("UserUuid is required");
+        RuleFor(item => item.UserThemes)
+            .Must(item => item.All(it => it.Length > 0)).WithMessage("Tags list item cannot contain empty strings");
     }
 }

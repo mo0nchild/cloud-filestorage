@@ -10,9 +10,4 @@
       <ProjectReference Include="..\Pinterest.Domain.Core\Pinterest.Domain.Core.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Enums\" />
-      <Folder Include="Settings\" />
-    </ItemGroup>
-
 </Project>

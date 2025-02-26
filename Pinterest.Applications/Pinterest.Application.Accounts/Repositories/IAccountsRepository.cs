@@ -6,5 +6,5 @@ namespace Pinterest.Application.Accounts.Repositories;
 
 public interface IAccountsRepository : IBaseRepository
 {
-    public DbSet<AccountInfo> AccountInfos { get; set; }
+    DbSet<AccountInfo> AccountInfos { get; set; }
 }

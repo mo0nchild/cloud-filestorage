@@ -24,7 +24,6 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\Pinterest.Infrastructures\Pinterest.Databases\Pinterest.Database.Posts\Pinterest.Database.Posts.csproj" />
-      <ProjectReference Include="..\..\Pinterest.Infrastructures\Pinterest.S3Storages\Pinterest.S3Storage.Minio\Pinterest.S3Storage.Minio.csproj" />
       <ProjectReference Include="..\..\Pinterest.Shared\Pinterest.Shared.Commons\Pinterest.Shared.Commons.csproj" />
       <ProjectReference Include="..\..\Pinterest.Shared\Pinterest.Shared.Security\Pinterest.Shared.Security.csproj" />
     </ItemGroup>

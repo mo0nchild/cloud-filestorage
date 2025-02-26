@@ -1,4 +1,5 @@
 ﻿using Pinterest.Application.Posts.Models;
+using Pinterest.Application.Posts.Models.PostsInfo;
 
 namespace Pinterest.Application.Posts.Interfaces;
 

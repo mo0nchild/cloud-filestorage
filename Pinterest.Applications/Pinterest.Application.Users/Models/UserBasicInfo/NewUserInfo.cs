@@ -30,6 +30,7 @@ public class NewUserInfoValidator : AbstractValidator<NewUserInfo>
     {
         RuleFor(item => item.Username)
             .NotEmpty().WithMessage("Username is required")
+            .MaximumLength(50).WithMessage("Username must not exceed 50 characters")
             .MustAsync(async (value, _) =>
             {
                 using var dbContext = await repositoryFactory.CreateRepositoryAsync();
@@ -38,6 +39,7 @@ public class NewUserInfoValidator : AbstractValidator<NewUserInfo>
             }).WithMessage("Username already exists");
         RuleFor(item => item.Email)
             .NotEmpty().WithMessage("Email is required")
+            .MaximumLength(100).WithMessage("The mail value cannot exceed 100 characters")
             .EmailAddress().WithMessage("Email is not a valid email address")
             .MustAsync(async (value, _) =>
             {

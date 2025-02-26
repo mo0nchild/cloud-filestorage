@@ -8,7 +8,7 @@ public static class Bootstrapper
 {
     public static Task<IServiceCollection> AddPostsServices(this IServiceCollection collection)
     {
-        collection.AddTransient<IPostsService, PostsService>();
+        
         return Task.FromResult(collection);
     }
 }

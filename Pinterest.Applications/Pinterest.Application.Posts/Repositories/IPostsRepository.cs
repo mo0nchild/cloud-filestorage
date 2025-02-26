@@ -6,5 +6,6 @@ namespace Pinterest.Application.Posts.Repositories;
 
 public interface IPostsRepository : IBaseRepository
 {
-    public DbSet<PostInfo> Posts { get; set; }
+    DbSet<PostInfo> Posts { get; set; }
+    DbSet<Comment> Comments { get; set; }
 }

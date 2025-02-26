@@ -14,6 +14,11 @@ service AuthorSubscribersService {
       get: "/users/subscribers";
     };
   }
+  rpc GetSubscribersStream(AuthorInfo) returns (stream SubscriberInfo) {
+    option (google.api.http) = {
+      get: "/users/subscribers/stream";
+    };
+  }
 }
 message AuthorInfo {
   string authorUuid = 1;

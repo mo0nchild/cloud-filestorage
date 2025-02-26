@@ -41,4 +41,25 @@ public class AuthorSubscribersServiceImpl : AuthorSubscribersService.AuthorSubsc
         }
         return subscribersResult;
     }
+    [Authorize(SecurityInfo.User, AuthenticationSchemes = UsersAuthenticationOptions.DefaultScheme)]
+    public override async Task GetSubscribersStream(AuthorInfo request, IServerStreamWriter<SubscriberInfo> responseStream, 
+        ServerCallContext context)
+    {
+        if (!Guid.TryParse(request.AuthorUuid, out var authorUuid))
+        {
+            throw new RpcException(new Status(StatusCode.InvalidArgument, "Invalid GUID"));
+        }
+        try {
+            var subscribers = await _subscribersService.GetSubscribersList(authorUuid);
+            foreach (var item in subscribers.Users.Select(it => new SubscriberInfo { UserUuid = it.Uuid.ToString() }))
+            {
+                await responseStream.WriteAsync(item);
+            }
+        }
+        catch (ProcessException error)
+        {
+            Logger.LogError($"Cannot get subscribers for {request.AuthorUuid}: {error.Message}");
+            throw new RpcException(new Status(StatusCode.NotFound, error.Message));
+        }
+    }
 }

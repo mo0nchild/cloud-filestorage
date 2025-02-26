@@ -1,7 +1,9 @@
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.OpenApi.Models;
 using Pinterest.Api.Posts.Configurations;
+using Pinterest.Shared.Commons;
 using Pinterest.Shared.Commons.Middlewares;
+using Pinterest.Shared.Security;
 using Pinterest.Shared.Security.Configurations;
 
 namespace Pinterest.Api.Posts;
@@ -11,36 +13,27 @@ public static class Program
     public static async Task Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
-        builder.Services.AddAuthorization();
         builder.Services.AddControllers();
-        builder.Services.AddHealthChecks();
-        builder.Services.AddHttpClient();
-        
+        builder.Services.AddGrpc().AddJsonTranscoding();
         builder.Services.AddEndpointsApiExplorer();
-        builder.Services.AddSwaggerGen(options =>
-        {
-            options.SwaggerDoc("v1", new OpenApiInfo { Title = "Pinterest.Api.Posts", Version = "v1" });
-            /*options.OperationFilter<AuthorizationHeaderFilter>();*/
-        });
-        builder.Services.Configure<FormOptions>(options => {
-            options.ValueCountLimit = int.MaxValue;
-        });
-        await builder.Services.AddAccountsApiServices(builder.Configuration);
-        /*await builder.Services.AddIdentityServices(builder.Configuration);*/
+        builder.Services.AddHealthChecks();
+        
+        await builder.Services.AddSecurityServices(builder.Configuration);
+        await builder.Services.AddPostsApiServices(builder.Configuration);
+        await builder.Services.AddCoreConfiguration(builder.Configuration);
+        await builder.Services.AddSecretService(builder.Configuration);
 
         var application = builder.Build();
         if (application.Environment.IsDevelopment())
         {
             application.UseSwagger();
-            application.UseSwaggerUI(options =>
-            {
-                options.SwaggerEndpoint("/swagger/v1/swagger.json", "Pinterest.Api.Posts");
-            });
+            application.UseSwaggerUI();
         }
         application.UseHttpsRedirection();
+        application.UseCoreConfiguration();
+        application.UseSecurity();
         
-        application.UseAuthentication();
-        application.UseAuthorization();
+        application.UseHealthChecks("/health");
         application.MapControllers();
         await application.RunAsync();
     }

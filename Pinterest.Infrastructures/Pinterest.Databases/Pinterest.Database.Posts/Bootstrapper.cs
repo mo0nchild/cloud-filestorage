@@ -2,7 +2,6 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using Pinterest.Application.Accounts.Repositories;
 using Pinterest.Application.Posts.Repositories;
 using Pinterest.Database.Posts.Contexts;
 using Pinterest.Database.Settings.Factories;

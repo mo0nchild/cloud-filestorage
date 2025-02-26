@@ -4,6 +4,7 @@ using Pinterest.Application.Users;
 using Pinterest.Application.Users.Services;
 using Pinterest.Database.Users;
 using Pinterest.Documents.Mongo;
+using Pinterest.Domain.CommonModels.Models;
 using Pinterest.Domain.Core.MessageBus;
 using Pinterest.Domain.Messages.AccountMessages;
 using Pinterest.Domain.Messages.SagaMessages.CreateAccountSaga;
@@ -22,7 +23,7 @@ public static class ApiServicesConfigurations
 {
     private static readonly string RegistrateAccountSagaName = "RegistrateAccount";
     private static readonly string PostsCollectionName = "ValidPosts";
-    public static async Task<IServiceCollection> AddApiServices(this IServiceCollection serviceCollection,
+    public static async Task<IServiceCollection> AddUsersApiServices(this IServiceCollection serviceCollection,
         IConfiguration configuration)
     {
         await serviceCollection.AddMongoClient(configuration);

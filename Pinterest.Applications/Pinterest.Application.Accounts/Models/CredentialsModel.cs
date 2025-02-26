@@ -37,6 +37,7 @@ public class CredentialsModelValidator : AbstractValidator<CredentialsModel>
     {
         RuleFor(item => item.Email)
             .NotEmpty().WithMessage("The mail value cannot be empty")
+            .MaximumLength(100).WithMessage("The mail value cannot exceed 100 characters")
             .EmailAddress().WithMessage("Invalid mail format")
             .Must(item =>
             {

@@ -4,7 +4,7 @@ using Newtonsoft.Json.Linq;
 
 namespace Pinterest.Documents.Mongo.Configurations;
 
-public class JObjectSerializer : SerializerBase<JObject>
+internal class JObjectSerializer : SerializerBase<JObject>
 {
     public override void Serialize(BsonSerializationContext context, BsonSerializationArgs args, JObject value)
     {

@@ -6,6 +6,7 @@ namespace Pinterest.Application.Users.Models.UserBasicInfo;
 public class UserInfo
 {
     public required Guid Uuid { get; set; }
+    public required DateTime CreatedTime { get; set; }
     public required string Username { get; set; }
     public required string Email { get; set; }
     
@@ -18,11 +19,12 @@ public class UserInfoProfile : Profile
     public UserInfoProfile()
     {
         CreateMap<User, UserInfo>()
-            .ForMember(u => u.UserThemes, o => o.MapFrom(s => s.UserThemes))
-            .ForMember(u => u.Email, o => o.MapFrom(s => s.Email))
-            .ForMember(u => u.Username, o => o.MapFrom(s => s.Username))
-            .ForMember(u => u.ImagePath, o => o.MapFrom(s => s.PhotoPath))
-            .ForMember(u => u.Uuid, o => o.MapFrom(s => s.Uuid));
+            .ForMember(dest => dest.UserThemes, opt => opt.MapFrom(src => src.UserThemes))
+            .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email))
+            .ForMember(dest => dest.Username, opt => opt.MapFrom(src => src.Username))
+            .ForMember(dest => dest.ImagePath, opt => opt.MapFrom(src => src.PhotoPath))
+            .ForMember(dest => dest.Uuid, opt => opt.MapFrom(src => src.Uuid))
+            .ForMember(dest => dest.CreatedTime, opt => opt.MapFrom(src => src.CreatedTime));
         
     }
 }

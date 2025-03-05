@@ -31,12 +31,24 @@ namespace Pinterest.Database.Posts.Migrations
                     CommentsEnabled = table.Column<bool>(type: "boolean", nullable: false),
                     IsPublic = table.Column<bool>(type: "boolean", nullable: false),
                     GrantedAccess = table.Column<string>(type: "json", nullable: false),
-                    Tags = table.Column<string>(type: "json", nullable: false),
                     CreatedTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_PostInfo", x => x.Uuid);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Tags",
+                columns: table => new
+                {
+                    Uuid = table.Column<Guid>(type: "uuid", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    CreatedTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Tags", x => x.Uuid);
                 });
 
             migrationBuilder.CreateTable(
@@ -71,6 +83,31 @@ namespace Pinterest.Database.Posts.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "PostInfoTagInfo",
+                columns: table => new
+                {
+                    PostsUuid = table.Column<Guid>(type: "uuid", nullable: false),
+                    TagsUuid = table.Column<Guid>(type: "uuid", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PostInfoTagInfo", x => new { x.PostsUuid, x.TagsUuid });
+                    table.ForeignKey(
+                        name: "FK_PostInfoTagInfo_PostInfo_PostsUuid",
+                        column: x => x.PostsUuid,
+                        principalSchema: "public",
+                        principalTable: "PostInfo",
+                        principalColumn: "Uuid",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_PostInfoTagInfo_Tags_TagsUuid",
+                        column: x => x.TagsUuid,
+                        principalTable: "Tags",
+                        principalColumn: "Uuid",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Comment_ParentCommentId",
                 schema: "public",
@@ -96,6 +133,11 @@ namespace Pinterest.Database.Posts.Migrations
                 table: "PostInfo",
                 column: "Uuid",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PostInfoTagInfo_TagsUuid",
+                table: "PostInfoTagInfo",
+                column: "TagsUuid");
         }
 
         /// <inheritdoc />
@@ -106,8 +148,14 @@ namespace Pinterest.Database.Posts.Migrations
                 schema: "public");
 
             migrationBuilder.DropTable(
+                name: "PostInfoTagInfo");
+
+            migrationBuilder.DropTable(
                 name: "PostInfo",
                 schema: "public");
+
+            migrationBuilder.DropTable(
+                name: "Tags");
         }
     }
 }

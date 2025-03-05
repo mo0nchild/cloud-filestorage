@@ -4,7 +4,7 @@ using Pinterest.Domain.Core.Repositories;
 
 namespace Pinterest.Documents.Mongo.Infrastructures;
 
-public class MongoRepository<TDocument> : IDocumentRepository<TDocument>
+internal class MongoRepository<TDocument> : IDocumentRepository<TDocument>
     where TDocument : BaseEntity
 {
     private readonly IMongoDatabase _database;

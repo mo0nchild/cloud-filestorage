@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using Pinterest.Application.Accounts.Repositories;
 using Pinterest.Database.Accounts.Configurations;
 using Pinterest.Domain.Authorization.Entities;
@@ -17,4 +18,6 @@ public class AccountsDbContext(DbContextOptions<AccountsDbContext> options) : Db
         base.OnModelCreating(modelBuilder);
         modelBuilder.ApplyConfiguration(new AccountsConfiguration());
     }
+    public Task<IDbContextTransaction> BeginTransactionAsync() => Database.BeginTransactionAsync();
+    public IDbContextTransaction BeginTransaction() => Database.BeginTransaction();
 }

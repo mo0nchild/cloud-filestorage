@@ -24,8 +24,15 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\Pinterest.Infrastructures\Pinterest.Databases\Pinterest.Database.Posts\Pinterest.Database.Posts.csproj" />
+      <ProjectReference Include="..\..\Pinterest.Infrastructures\Pinterest.Documents\Pinterest.Documents.Elastic\Pinterest.Documents.Elastic.csproj" />
+      <ProjectReference Include="..\..\Pinterest.Infrastructures\Pinterest.Documents\Pinterest.Documents.Mongo\Pinterest.Documents.Mongo.csproj" />
       <ProjectReference Include="..\..\Pinterest.Shared\Pinterest.Shared.Commons\Pinterest.Shared.Commons.csproj" />
       <ProjectReference Include="..\..\Pinterest.Shared\Pinterest.Shared.Security\Pinterest.Shared.Security.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Requests\" />
+      <Folder Include="Services\" />
     </ItemGroup>
 
 </Project>

@@ -1,7 +1,13 @@
-﻿namespace Pinterest.Domain.Core.Repositories;
+﻿
+using Microsoft.EntityFrameworkCore.Storage;
+
+namespace Pinterest.Domain.Core.Repositories;
 
 public interface IBaseRepository : IDisposable
 {
-    public Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
-    public int SaveChanges();
+    Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
+    int SaveChanges();
+    
+    Task<IDbContextTransaction> BeginTransactionAsync();
+    IDbContextTransaction BeginTransaction();
 }

@@ -5,26 +5,37 @@ namespace Pinterest.Application.Posts.Models.PostsInfo;
 
 public class PostModel
 {
-    public virtual Guid Uuid { get; set; } = Guid.NewGuid();
-    public DateTime CreatedTime { get; set; } = DateTime.UtcNow;
+    public required Guid PostUuid { get; set; } = Guid.NewGuid();
+    public required DateTime CreatedTime { get; set; } = DateTime.UtcNow;
     
-    public string Title { get; set; } = string.Empty;
-    public string? Description { get; set; } = default;
-    public Guid AuthorUuid { get; set; } = Guid.Empty;
+    public required string Title { get; set; } = string.Empty;
+    public string? Description { get; set; }
+    public required Guid AuthorUuid { get; set; } = Guid.Empty;
     
-    public Guid FileUuid { get; set; } = Guid.Empty;
-    public Guid? PreviewUuid { get; set; } = default;
+    public required Guid FileUuid { get; set; } = Guid.Empty;
+    public Guid? PreviewUuid { get; set; }
     
-    public int ViewsCount { get; set; } = default;
-    public int LikesCount { get; set; } = default;
-    public bool CommentsEnabled { get; set; } = default;
-    public bool IsPublic { get; set; } = default;
+    public required int ViewsCount { get; set; }
+    public required int LikesCount { get; set; }
     
-    public virtual List<string> Tags { get; set; } = new();
-    public virtual List<Comment> Comments { get; set; } = new(); 
+    public required bool CommentsEnabled { get; set; }
+    public required bool IsPublic { get; set; }
+    public IReadOnlyList<TagModel> Tags { get; set; } = new List<TagModel>();
 }
-
+public class TagModel
+{
+    public required string Name { get; set; }
+    public required int PostsCount { get; set; }
+}
 public class PostModelProfile : Profile
 {
-    public PostModelProfile() => CreateMap<PostInfo, PostModel>();
+    public PostModelProfile()
+    {
+        CreateMap<TagInfo, TagModel>()
+            .ForMember(dest => dest.PostsCount, opt => opt.MapFrom(src => src.Posts.Count))
+            .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name));
+        CreateMap<PostInfo, PostModel>()
+            .ForMember(dest => dest.PostUuid, opt => opt.MapFrom(src => src.Uuid))
+            .ForMember(dest => dest.Tags, opt => opt.MapFrom(src => src.Tags));
+    }
 }

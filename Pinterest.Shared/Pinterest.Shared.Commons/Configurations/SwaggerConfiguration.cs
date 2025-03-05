@@ -20,6 +20,7 @@ public static class SwaggerConfiguration
         var swaggerSettings = configuration.GetSection(nameof(SwaggerSettings)).Get<SwaggerSettings>();
         
         services.AddOptions<SwaggerGenOptions>();
+        
         services.AddGrpcSwagger();
         services.AddSwaggerGen(options =>
         {
@@ -27,7 +28,7 @@ public static class SwaggerConfiguration
             options.UseInlineDefinitionsForEnums();
             options.DescribeAllParametersInCamelCase();
             options.CustomSchemaIds(x => x.FullName);
-
+            
             var xmlPath = Path.Combine(AppContext.BaseDirectory, $"{Assembly.GetEntryAssembly()?.GetName().Name}.xml");
             if (File.Exists(xmlPath))
                 options.IncludeXmlComments(xmlPath);

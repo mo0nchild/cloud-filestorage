@@ -6,9 +6,11 @@ namespace Pinterest.Application.Posts;
 
 public static class Bootstrapper
 {
-    public static Task<IServiceCollection> AddPostsServices(this IServiceCollection collection)
+    public static Task<IServiceCollection> AddPostsServices(this IServiceCollection servicesCollection)
     {
-        
-        return Task.FromResult(collection);
+        servicesCollection.AddTransient<IPostsService, PostsService>();
+        servicesCollection.AddTransient<IPostsValidators, PostsValidators>();
+        servicesCollection.AddTransient<ITagsService, TagsService>();
+        return Task.FromResult(servicesCollection);
     }
 }

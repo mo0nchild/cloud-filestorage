@@ -17,12 +17,7 @@ public class PostsConfiguration : IEntityTypeConfiguration<PostInfo>
         builder.Property(item => item.AuthorUuid).IsRequired();
         builder.Property(item => item.FileUuid).IsRequired();
         builder.Property(item => item.PreviewUuid).IsRequired(false);
-
-        builder.Property(item => item.Tags)
-            .HasConversion(
-                value => JsonSerializer.Serialize(value, new JsonSerializerOptions()),
-                value => JsonSerializer.Deserialize<List<string>>(value, new JsonSerializerOptions())!
-            ).HasColumnType("json");
+        
         builder.Property(item => item.GrantedAccess)
             .HasConversion(
                 value => JsonSerializer.Serialize(value, new JsonSerializerOptions()),

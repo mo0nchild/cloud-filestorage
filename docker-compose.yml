@@ -64,6 +64,11 @@ services:
       - "27017:27017"
     volumes:
       - ./docker-volumes/mongo-data:/data/db
+    networks:
+      pinterest-network:
+        aliases:
+          - mongodb
+        ipv4_address: 172.24.0.3
       
   rabbitmq:
     image: rabbitmq:3.10.7-management
@@ -82,7 +87,7 @@ services:
       pinterest-network:
         aliases:
           - rabbitmq
-        ipv4_address: 172.24.0.3
+        ipv4_address: 172.24.0.4
         
   minio:
     image: quay.io/minio/minio
@@ -94,7 +99,7 @@ services:
       pinterest-network:
         aliases:
           - minio
-        ipv4_address: 172.24.0.4
+        ipv4_address: 172.24.0.5
     volumes:
       - "./docker-volumes/minio-data/data:/data"
     environment:
@@ -102,6 +107,28 @@ services:
       - MINIO_ROOT_PASSWORD=1234567890
     restart: always
     command: server /data --console-address :9001
+
+  elasticsearch:
+    image: elasticsearch:custom
+    build:
+      context: .
+      dockerfile: Pinterest.Infrastructures/Pinterest.Documents/Pinterest.Documents.Elastic/Dockerfile.elastic
+    container_name: elasticsearch
+    environment:
+      - discovery.type=single-node
+      - ELASTIC_PASSWORD=1234567890
+      - xpack.security.enabled=true
+      - xpack.security.transport.ssl.enabled=false
+    volumes:
+      - ./docker-volumes/elasticsearch-data:/usr/share/elasticsearch/data
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    networks:
+      pinterest-network:
+        aliases:
+          - elasticsearch
+        ipv4_address: 172.24.0.6
 
 networks:
   pinterest-network:

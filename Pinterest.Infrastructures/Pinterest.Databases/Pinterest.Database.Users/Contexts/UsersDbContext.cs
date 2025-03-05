@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using Pinterest.Application.Users.Repositories;
 using Pinterest.Database.Users.Configurations;
 using Pinterest.Domain.Users.Entities;
@@ -22,4 +23,6 @@ public class UsersDbContext(DbContextOptions<UsersDbContext> options) : DbContex
         modelBuilder.ApplyConfiguration(new SubscriptionConfiguration());
         modelBuilder.ApplyConfiguration(new FavoritePostConfiguration());
     }
+    public Task<IDbContextTransaction> BeginTransactionAsync() => Database.BeginTransactionAsync();
+    public IDbContextTransaction BeginTransaction() => Database.BeginTransaction();
 }

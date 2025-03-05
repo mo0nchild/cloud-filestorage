@@ -22,7 +22,7 @@ public static class Program
         await builder.Services.AddPostsApiServices(builder.Configuration);
         await builder.Services.AddCoreConfiguration(builder.Configuration);
         await builder.Services.AddSecretService(builder.Configuration);
-
+        
         var application = builder.Build();
         if (application.Environment.IsDevelopment())
         {

@@ -7,7 +7,7 @@ using Pinterest.Domain.Core.Models;
 
 namespace Pinterest.Documents.Mongo.Configurations;
 
-public static class MappingConfiguration
+internal static class MappingConfiguration
 {
     public static void ConfigureMappings<TDocument>() where TDocument : BaseEntity
     {

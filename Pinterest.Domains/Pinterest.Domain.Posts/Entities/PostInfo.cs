@@ -18,6 +18,6 @@ public class PostInfo : BaseEntity
     public bool IsPublic { get; set; } = default;
     
     public virtual List<Guid> GrantedAccess { get; set; } = new();
-    public virtual List<string> Tags { get; set; } = new();
+    public virtual List<TagInfo> Tags { get; set; } = new();
     public virtual List<Comment> Comments { get; set; } = new(); 
 }

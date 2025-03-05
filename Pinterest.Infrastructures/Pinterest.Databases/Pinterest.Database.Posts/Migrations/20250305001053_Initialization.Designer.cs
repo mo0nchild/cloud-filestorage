@@ -12,7 +12,7 @@ using Pinterest.Database.Posts.Contexts;
 namespace Pinterest.Database.Posts.Migrations
 {
     [DbContext(typeof(PostsDbContext))]
-    [Migration("20250226222554_Initialization")]
+    [Migration("20250305001053_Initialization")]
     partial class Initialization
     {
         /// <inheritdoc />
@@ -103,10 +103,6 @@ namespace Pinterest.Database.Posts.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("integer");
 
-                    b.Property<string>("Tags")
-                        .IsRequired()
-                        .HasColumnType("json");
-
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -121,6 +117,39 @@ namespace Pinterest.Database.Posts.Migrations
                         .IsUnique();
 
                     b.ToTable("PostInfo", "public");
+                });
+
+            modelBuilder.Entity("Pinterest.Domain.Posts.Entities.TagInfo", b =>
+                {
+                    b.Property<Guid>("Uuid")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedTime")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Uuid");
+
+                    b.ToTable("Tags");
+                });
+
+            modelBuilder.Entity("PostInfoTagInfo", b =>
+                {
+                    b.Property<Guid>("PostsUuid")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("TagsUuid")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("PostsUuid", "TagsUuid");
+
+                    b.HasIndex("TagsUuid");
+
+                    b.ToTable("PostInfoTagInfo");
                 });
 
             modelBuilder.Entity("Pinterest.Domain.Posts.Entities.Comment", b =>
@@ -139,6 +168,21 @@ namespace Pinterest.Database.Posts.Migrations
                     b.Navigation("ParentComment");
 
                     b.Navigation("Post");
+                });
+
+            modelBuilder.Entity("PostInfoTagInfo", b =>
+                {
+                    b.HasOne("Pinterest.Domain.Posts.Entities.PostInfo", null)
+                        .WithMany()
+                        .HasForeignKey("PostsUuid")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Pinterest.Domain.Posts.Entities.TagInfo", null)
+                        .WithMany()
+                        .HasForeignKey("TagsUuid")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Pinterest.Domain.Posts.Entities.Comment", b =>

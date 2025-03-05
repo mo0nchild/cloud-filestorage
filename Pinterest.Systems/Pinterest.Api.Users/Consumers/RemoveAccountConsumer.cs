@@ -8,7 +8,6 @@ namespace Pinterest.Api.Users.Consumers;
 public class RemoveAccountConsumer : IMessageConsumer<RemoveAccountMessage>
 {
     private readonly IUserService _userService;
-
     public RemoveAccountConsumer(IUserService userService, ILogger<RemoveAccountConsumer> logger)
     {
         Logger = logger;

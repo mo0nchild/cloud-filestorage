@@ -4,7 +4,7 @@ using Pinterest.Application.Posts.Infrastructures.Models;
 
 namespace Pinterest.Documents.Elastic.Configurations;
 
-public static class TagIndexConfiguration
+internal static class TagIndexConfiguration
 {
     private static readonly ILogger Logger = LoggerFactory.Create(builder => builder.AddConsole())
         .CreateLogger(nameof(TagIndexConfiguration));

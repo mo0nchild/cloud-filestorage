@@ -4,7 +4,7 @@ using Pinterest.Domain.Users.Entities;
 
 namespace Pinterest.Database.Users.Configurations;
 
-public class FavoritePostConfiguration : IEntityTypeConfiguration<FavoritePost>
+internal class FavoritePostConfiguration : IEntityTypeConfiguration<FavoritePost>
 {
     public void Configure(EntityTypeBuilder<FavoritePost> builder)
     {

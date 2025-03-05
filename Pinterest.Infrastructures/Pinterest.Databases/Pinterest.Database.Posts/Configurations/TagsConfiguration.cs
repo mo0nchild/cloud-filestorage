@@ -4,7 +4,7 @@ using Pinterest.Domain.Posts.Entities;
 
 namespace Pinterest.Database.Posts.Configurations;
 
-public class TagsConfiguration : IEntityTypeConfiguration<TagInfo>
+internal class TagsConfiguration : IEntityTypeConfiguration<TagInfo>
 {
     public void Configure(EntityTypeBuilder<TagInfo> builder)
     {

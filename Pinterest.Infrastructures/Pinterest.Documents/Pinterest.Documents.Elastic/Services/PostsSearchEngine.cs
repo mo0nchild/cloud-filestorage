@@ -13,7 +13,7 @@ using SearchRequest = Pinterest.Application.Posts.Infrastructures.Interfaces.Sea
 
 namespace Pinterest.Documents.Elastic.Services;
 
-public class PostsSearchEngine : ISearchEngine<PostIndex>
+internal class PostsSearchEngine : ISearchEngine<PostIndex>
 {
     private readonly string _indexName = nameof(PostIndex).ToLower();
     private readonly ElasticsearchClient _elasticClient;

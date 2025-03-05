@@ -22,6 +22,7 @@ public class PostsDbContext : DbContext, IPostsRepository
         base.OnModelCreating(modelBuilder);
         modelBuilder.ApplyConfiguration(new PostsConfiguration());
         modelBuilder.ApplyConfiguration(new CommentsConfiguration());
+        modelBuilder.ApplyConfiguration(new TagsConfiguration());
     }
     public Task<IDbContextTransaction> BeginTransactionAsync() => Database.BeginTransactionAsync();
     public IDbContextTransaction BeginTransaction() => Database.BeginTransaction();

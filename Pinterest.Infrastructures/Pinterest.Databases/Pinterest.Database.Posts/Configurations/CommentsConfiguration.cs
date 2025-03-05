@@ -4,7 +4,7 @@ using Pinterest.Domain.Posts.Entities;
 
 namespace Pinterest.Database.Posts.Configurations;
 
-public class CommentsConfiguration : IEntityTypeConfiguration<Comment>
+internal class CommentsConfiguration : IEntityTypeConfiguration<Comment>
 {
     public void Configure(EntityTypeBuilder<Comment> builder)
     {

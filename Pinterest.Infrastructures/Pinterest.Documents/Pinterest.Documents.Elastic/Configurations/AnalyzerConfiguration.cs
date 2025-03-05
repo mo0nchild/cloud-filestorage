@@ -3,7 +3,7 @@ using Elastic.Clients.Elasticsearch.IndexManagement;
 
 namespace Pinterest.Documents.Elastic.Configurations;
 
-public static class AnalyzerConfiguration
+internal static class AnalyzerConfiguration
 {
     public static IndexSettings BasicSettings { get; } = new IndexSettings()
     {

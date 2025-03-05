@@ -5,7 +5,7 @@ using System.Text.Json;
 
 namespace Pinterest.Database.Posts.Configurations;
 
-public class PostsConfiguration : IEntityTypeConfiguration<PostInfo>
+internal class PostsConfiguration : IEntityTypeConfiguration<PostInfo>
 {
     public void Configure(EntityTypeBuilder<PostInfo> builder)
     {

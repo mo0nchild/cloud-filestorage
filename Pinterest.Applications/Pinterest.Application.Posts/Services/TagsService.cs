@@ -11,7 +11,7 @@ using Pinterest.Domain.Posts.Entities;
 
 namespace Pinterest.Application.Posts.Services;
 
-public class TagsService : ITagsService
+internal class TagsService : ITagsService
 {
     private readonly RepositoryFactoryInterface<IPostsRepository> _repositoryFactory;
     private readonly IMapper _mapper;

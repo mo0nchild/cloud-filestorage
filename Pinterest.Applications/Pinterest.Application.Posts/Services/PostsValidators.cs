@@ -4,7 +4,7 @@ using Pinterest.Shared.Commons.Validations;
 
 namespace Pinterest.Application.Posts.Services;
 
-public class PostsValidators : IPostsValidators
+internal class PostsValidators : IPostsValidators
 {
     public PostsValidators(IModelValidator<NewPostModel> newPostModelValidator,
         IModelValidator<RemovePostModel> removePostModelValidator,

@@ -5,7 +5,7 @@ using Pinterest.Domain.Users.Entities;
 
 namespace Pinterest.Database.Users.Configurations;
 
-public class UsersConfiguration : IEntityTypeConfiguration<User>
+internal class UsersConfiguration : IEntityTypeConfiguration<User>
 {
     public void Configure(EntityTypeBuilder<User> builder)
     {

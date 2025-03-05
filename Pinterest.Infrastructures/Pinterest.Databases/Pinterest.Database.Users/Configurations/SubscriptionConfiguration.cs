@@ -4,7 +4,7 @@ using Pinterest.Domain.Users.Entities;
 
 namespace Pinterest.Database.Users.Configurations;
 
-public class SubscriptionConfiguration : IEntityTypeConfiguration<Subscription>
+internal class SubscriptionConfiguration : IEntityTypeConfiguration<Subscription>
 {
     public void Configure(EntityTypeBuilder<Subscription> builder)
     {

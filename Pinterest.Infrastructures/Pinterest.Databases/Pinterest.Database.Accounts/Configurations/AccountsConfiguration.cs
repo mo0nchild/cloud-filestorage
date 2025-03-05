@@ -4,7 +4,7 @@ using Pinterest.Domain.Authorization.Entities;
 
 namespace Pinterest.Database.Accounts.Configurations;
 
-public class AccountsConfiguration : IEntityTypeConfiguration<AccountInfo>
+internal class AccountsConfiguration : IEntityTypeConfiguration<AccountInfo>
 {
     public void Configure(EntityTypeBuilder<AccountInfo> builder)
     {

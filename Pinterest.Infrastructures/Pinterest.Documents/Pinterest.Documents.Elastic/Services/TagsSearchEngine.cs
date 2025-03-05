@@ -12,7 +12,7 @@ using SearchRequest = Pinterest.Application.Posts.Infrastructures.Interfaces.Sea
 
 namespace Pinterest.Documents.Elastic.Services;
 
-public class TagsSearchEngine : ISearchEngine<TagIndex>
+internal class TagsSearchEngine : ISearchEngine<TagIndex>
 {
     private readonly string _indexName = nameof(TagIndex).ToLower();
     private readonly ElasticsearchClient _elasticClient;

@@ -31,7 +31,7 @@ internal class TokenService : ITokenService
         var securityToken = tokenHandler.CreateToken(new SecurityTokenDescriptor()
         {
             Subject = new ClaimsIdentity(claims),
-            Expires = DateTime.UtcNow.AddMinutes(expires),
+            Expires = DateTime.UtcNow.AddMilliseconds(expires),
             SigningCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256Signature)
         });
         return tokenHandler.WriteToken(securityToken);

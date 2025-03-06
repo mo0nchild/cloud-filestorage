@@ -32,7 +32,6 @@
 
     <ItemGroup>
       <Folder Include="Requests\" />
-      <Folder Include="Services\" />
     </ItemGroup>
 
 </Project>

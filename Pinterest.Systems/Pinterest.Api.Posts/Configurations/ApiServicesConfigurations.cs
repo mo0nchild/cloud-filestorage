@@ -26,7 +26,7 @@ public static class ApiServicesConfigurations
         await serviceCollection.AddElasticSearch(configuration);
         
         await serviceCollection.AddPostsDatabase(configuration);
-        await serviceCollection.AddPostsServices();
+        await serviceCollection.AddPostsServices(configuration);
         await serviceCollection.AddProducerService(configuration);
         
         await MessageConsumerRegistator.Registrate<CreatedUserConsumer, CreatedUserMessage>(serviceCollection);

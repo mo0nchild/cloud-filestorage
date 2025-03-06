@@ -12,7 +12,7 @@ using Pinterest.Database.Posts.Contexts;
 namespace Pinterest.Database.Posts.Migrations
 {
     [DbContext(typeof(PostsDbContext))]
-    [Migration("20250305001053_Initialization")]
+    [Migration("20250306011119_Initialization")]
     partial class Initialization
     {
         /// <inheritdoc />
@@ -130,11 +130,15 @@ namespace Pinterest.Database.Posts.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
 
                     b.HasKey("Uuid");
 
-                    b.ToTable("Tags");
+                    b.HasIndex("Uuid")
+                        .IsUnique();
+
+                    b.ToTable("TagInfo", "public");
                 });
 
             modelBuilder.Entity("PostInfoTagInfo", b =>
@@ -149,7 +153,7 @@ namespace Pinterest.Database.Posts.Migrations
 
                     b.HasIndex("TagsUuid");
 
-                    b.ToTable("PostInfoTagInfo");
+                    b.ToTable("PostTagsConnection", "public");
                 });
 
             modelBuilder.Entity("Pinterest.Domain.Posts.Entities.Comment", b =>

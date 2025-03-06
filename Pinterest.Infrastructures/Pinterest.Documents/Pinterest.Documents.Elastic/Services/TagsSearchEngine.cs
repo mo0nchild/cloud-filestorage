@@ -45,7 +45,7 @@ internal class TagsSearchEngine : ISearchEngine<TagIndex>
         if (searchResponse.IsValidResponse && searchResponse.Documents.Any())
         {
             var documentId = searchResponse.Hits.First().Id;
-            var deleteResponse = await _elasticClient.DeleteAsync(new DeleteRequest<TagIndex>(_indexName, documentId!));
+            var deleteResponse = await _elasticClient.DeleteAsync(new DeleteRequest(_indexName, documentId!));
 
             if (!deleteResponse.IsValidResponse)
             {

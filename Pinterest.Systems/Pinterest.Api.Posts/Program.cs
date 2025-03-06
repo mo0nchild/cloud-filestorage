@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.OpenApi.Models;
 using Pinterest.Api.Posts.Configurations;
+using Pinterest.Api.Posts.Services;
 using Pinterest.Shared.Commons;
 using Pinterest.Shared.Commons.Middlewares;
 using Pinterest.Shared.Security;
@@ -22,7 +23,8 @@ public static class Program
         await builder.Services.AddPostsApiServices(builder.Configuration);
         await builder.Services.AddCoreConfiguration(builder.Configuration);
         await builder.Services.AddSecretService(builder.Configuration);
-        
+
+        builder.Services.AddHostedService<TagsCleaningHostedService>();
         var application = builder.Build();
         if (application.Environment.IsDevelopment())
         {

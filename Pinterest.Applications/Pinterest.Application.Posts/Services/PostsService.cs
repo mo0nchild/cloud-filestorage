@@ -59,7 +59,7 @@ internal class PostsService : IPostsService
         await _validators.NewPostModelValidator.CheckAsync(newPost);
         using var dbContext = await _repositoryFactory.CreateRepositoryAsync();
         
-        Action? innerRollback = null;
+        Func<Task>? innerRollback = null;
         await using var transaction = await dbContext.BeginTransactionAsync();
         try {
             var mappedPost = _mapper.Map<PostInfo>(newPost);
@@ -81,7 +81,7 @@ internal class PostsService : IPostsService
         catch (Exception error)
         {
             await transaction.RollbackAsync();
-            if (innerRollback != null) innerRollback.Invoke();
+            if (innerRollback != null) await innerRollback.Invoke();
             
             Logger.LogError($"Error with adding new post - {newPost.Title}: {error.Message}"); 
             throw;
@@ -101,7 +101,6 @@ internal class PostsService : IPostsService
             dbContext.Posts.Remove(postInfo);
             await dbContext.SaveChangesAsync();
             await _searchEngine.RemovePostAsync(postInfo.Uuid);
-            await _tagsService.RemoveUnusedTags(affectedTags, dbContext);
 
             await transaction.CommitAsync();
             await _messagesProducer.SendToAllAsync(RemovePostMessage.RoutingPath, new RemovePostMessage()

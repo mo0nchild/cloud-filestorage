@@ -8,11 +8,12 @@ using Pinterest.Application.Posts.Models;
 using Pinterest.Application.Posts.Models.PostsInfo;
 using Pinterest.Shared.Commons.Helpers;
 using Pinterest.Shared.Security.Infrastructure;
+using Pinterest.Shared.Security.Models;
 using Pinterest.Shared.Security.Settings;
 
 namespace Pinterest.Api.Posts.Controllers;
 
-[Authorize(AuthenticationSchemes = UsersAuthenticationOptions.DefaultScheme)]
+[Authorize(SecurityInfo.User, AuthenticationSchemes = UsersAuthenticationOptions.DefaultScheme)]
 [Route("posts"), ApiController]
 public class PostsController : ControllerBase
 {

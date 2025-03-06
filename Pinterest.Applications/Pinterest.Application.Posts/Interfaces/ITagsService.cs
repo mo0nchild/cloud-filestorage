@@ -5,7 +5,7 @@ namespace Pinterest.Application.Posts.Interfaces;
 
 public interface ITagsService
 {
-    Task<(List<TagInfo> Tags, Action Rollback)> GetOrCreateTagsAsync(IReadOnlyList<string> tagNames, 
-        IPostsRepository? postsRepository = default);
-    Task RemoveUnusedTags(IReadOnlyList<Guid> affectedTags, IPostsRepository? repository = default);
+    Task<TagsResult> GetOrCreateTagsAsync(IReadOnlyList<string> tagNames, IPostsRepository? postsRepository = default);
+    Task<IReadOnlyList<Task>?> RemoveUnusedTags();
 }
+public record TagsResult(List<TagInfo> Tags, Func<Task> Rollback);

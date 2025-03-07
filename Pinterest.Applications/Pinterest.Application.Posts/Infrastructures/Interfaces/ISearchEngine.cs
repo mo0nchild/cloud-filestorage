@@ -7,6 +7,7 @@ public interface ISearchEngine<TModel> where TModel : BaseEntity
 {
     Task IndexPostAsync(TModel postIndex);
     Task RemovePostAsync(Guid postUuid);
+    Task UpdatePostAsync(TModel postIndex);
     Task<PagedResult<Guid>> SearchPostsAsync(SearchRequest searchRequest);
 }
 public class SearchRequest

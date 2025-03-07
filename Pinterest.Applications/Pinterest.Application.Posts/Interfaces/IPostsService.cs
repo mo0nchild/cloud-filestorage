@@ -8,7 +8,8 @@ public interface IPostsService
 {
     Task<PagedResult<PostModel>> GetPostsListAsync(PostRequestModel requestModel);
     Task<PagedResult<PostModel>> FindPostsByQueryAsync(string queryValue);
-    
+
+    Task UpdatePostAsync(UpdatePostModel updatePost);
     Task AddPostAsync(NewPostModel newPost);
     Task DeletePostAsync(RemovePostModel removePost);
 }

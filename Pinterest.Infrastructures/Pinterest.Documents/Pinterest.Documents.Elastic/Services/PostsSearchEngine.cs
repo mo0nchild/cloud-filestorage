@@ -60,6 +60,34 @@ internal class PostsSearchEngine : ISearchEngine<PostIndex>
             throw new ProcessException($"Cannot found post '{postUuid}' in search index: {_indexName}");
         }
     }
+    public async Task UpdatePostAsync(PostIndex postIndex)
+    {
+        var searchResponse = await _elasticClient.SearchAsync<PostIndex>(search => search
+            .Index(_indexName)
+            .Query(query => query.Term(term => term.Field(f => f.PostUuid).Value(postIndex.PostUuid.ToString())))
+        );
+        if (!searchResponse.IsValidResponse || !searchResponse.Documents.Any())
+        {
+            Logger.LogWarning($"Cannot find post '{postIndex.PostUuid}' in search index: {_indexName} " +
+                              $"- {searchResponse.DebugInformation}");
+            throw new ProcessException($"Cannot find post '{postIndex.PostUuid}' in search index: {_indexName}");
+        }
+        var documentId = searchResponse.Hits.First().Id;
+        var updateResponse = await _elasticClient.UpdateAsync<PostIndex, object>(_indexName, documentId!,
+            configureRequest: update => update.Doc(new
+            {
+                Title = postIndex.Title,
+                Description = postIndex.Description,
+                Tags = postIndex.Tags
+            })
+        );
+        if (!updateResponse.IsValidResponse)
+        {
+            Logger.LogWarning($"Failed to update post '{postIndex.PostUuid}' in index: {_indexName} " +
+                              $"- {updateResponse.DebugInformation}");
+            throw new ProcessException($"Failed to update post '{postIndex.PostUuid}' in index: {_indexName}");
+        }
+    }
     public async Task<PagedResult<Guid>> SearchPostsAsync(SearchRequest searchRequest)
     {
         var targetFields = new[] { nameof(PostIndex.Title).ToLower(), nameof(PostIndex.Description).ToLower() };

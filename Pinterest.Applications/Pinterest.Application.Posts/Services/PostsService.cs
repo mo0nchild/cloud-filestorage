@@ -1,7 +1,10 @@
-﻿using AutoMapper;
+﻿using System.Collections.Concurrent;
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Pinterest.Application.Commons.Exceptions;
+using Pinterest.Application.Commons.Helpers;
 using Pinterest.Application.Commons.Models;
 using Pinterest.Application.Posts.Infrastructures;
 using Pinterest.Application.Posts.Infrastructures.Interfaces;
@@ -21,6 +24,7 @@ namespace Pinterest.Application.Posts.Services;
 internal class PostsService : IPostsService
 {
     private readonly RepositoryFactoryInterface<IPostsRepository> _repositoryFactory;
+    private readonly InnerTransactionProcessor _transactionProcessor;
     private readonly IMapper _mapper;
     private readonly ISearchEngine<PostIndex> _searchEngine;
     private readonly IPostsValidators _validators;
@@ -28,6 +32,7 @@ internal class PostsService : IPostsService
     private readonly IMessageProducer _messagesProducer;
 
     public PostsService(RepositoryFactoryInterface<IPostsRepository> repositoryFactory,
+        [FromKeyedServices("PostsTransactions")] InnerTransactionProcessor transactionProcessor,
         IMapper mapper,
         ISearchEngine<PostIndex> searchEngine,
         IPostsValidators validators,
@@ -36,6 +41,7 @@ internal class PostsService : IPostsService
         ILogger<PostsService> logger)
     {
         _repositoryFactory = repositoryFactory;
+        _transactionProcessor = transactionProcessor;
         _mapper = mapper;
         _searchEngine = searchEngine;
         _validators = validators;
@@ -48,11 +54,70 @@ internal class PostsService : IPostsService
     public async Task<PagedResult<PostModel>> GetPostsListAsync(PostRequestModel requestModel)
     {
         using var dbContext = await _repositoryFactory.CreateRepositoryAsync();
-        throw new NotImplementedException();
+        var query = dbContext.Posts.AsQueryable();
+        
+        if (!string.IsNullOrEmpty(requestModel.TagName))
+        {
+            query = query.Where(post => post.Tags.Any(tag => tag.Name == requestModel.TagName));
+        }
+        query = requestModel.SortingType switch
+        {
+            SortingType.ByRatingAscending => query.OrderBy(post => post.LikesCount),
+            SortingType.ByRatingDescending => query.OrderByDescending(post => post.LikesCount),
+            SortingType.ByDateAscending => query.OrderBy(post => post.CreatedTime),
+            SortingType.ByDateDescending => query.OrderByDescending(post => post.CreatedTime),
+            SortingType.ByViewsCountAscending => query.OrderBy(post => post.ViewsCount),
+            SortingType.ByViewsCountDescending => query.OrderByDescending(post => post.ViewsCount),
+            _ => throw new ProcessException($"Invalid sorting type: {requestModel.SortingType}")
+        };
+        var totalCount = await query.CountAsync();
+        var posts = await query.Skip(requestModel.PagedRange.From)
+            .Take(requestModel.PagedRange.ListSize)
+            .ToListAsync();
+        
+        return new PagedResult<PostModel>
+        {
+            Items = _mapper.Map<List<PostModel>>(posts),
+            TotalCount = totalCount,
+        };
     }
     public Task<PagedResult<PostModel>> FindPostsByQueryAsync(string queryValue)
     {
         throw new NotImplementedException();
+    }
+    public async Task UpdatePostAsync(UpdatePostModel updatePost)
+    {
+        await _validators.UpdatePostModelValidator.CheckAsync(updatePost);
+        using var innerTransaction = await _transactionProcessor.BeginInnerTransaction(updatePost.PostUuid);
+        
+        using var dbContext = await _repositoryFactory.CreateRepositoryAsync();
+        Func<Task>? innerRollback = null;
+        await using var transaction = await dbContext.BeginTransactionAsync();
+        try {
+            var postInfo = await dbContext.Posts.FirstAsync(it => it.Uuid == updatePost.PostUuid);
+            postInfo.Title = updatePost.Title;
+            postInfo.Description = updatePost.Description;
+            postInfo.CommentsEnabled = updatePost.CommentsEnabled;
+            postInfo.IsPublic = updatePost.IsPublic;
+            
+            var (tags, tagsRollback) = await _tagsService.GetOrCreateTagsAsync(updatePost.Tags.ToList(), dbContext);
+            (postInfo.Tags, innerRollback) = (tags, tagsRollback);
+            foreach (var tag in tags) tag.Posts.Add(postInfo);
+            
+            dbContext.Posts.Update(postInfo);
+            await dbContext.SaveChangesAsync();
+            
+            await _searchEngine.UpdatePostAsync(_mapper.Map<PostIndex>(postInfo));
+            await transaction.CommitAsync();
+        }
+        catch (Exception error)
+        {
+            await transaction.RollbackAsync();
+            if (innerRollback != null) await innerRollback.Invoke();
+            
+            Logger.LogError($"Error with updating exists post - {updatePost.PostUuid}: {error.Message}"); 
+            throw;
+        }
     }
     public async Task AddPostAsync(NewPostModel newPost)
     {
@@ -90,11 +155,11 @@ internal class PostsService : IPostsService
     public async Task DeletePostAsync(RemovePostModel removePost)
     {
         await _validators.RemovePostModelValidator.CheckAsync(removePost);
+        using var innerTransaction = await _transactionProcessor.BeginInnerTransaction(removePost.PostUuid);
         
         using var dbContext = await _repositoryFactory.CreateRepositoryAsync();
         await using var transaction = await dbContext.BeginTransactionAsync();
-        try
-        {
+        try {
             var postInfo = await dbContext.Posts.Include(it => it.Tags).FirstAsync(it => it.Uuid == removePost.PostUuid);
             var affectedTags = postInfo.Tags.Select(item => item.Uuid).ToList();
 

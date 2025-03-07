@@ -10,7 +10,7 @@ namespace Pinterest.Application.Posts.Models.PostsInfo;
 public class PostRequestModel 
 {
     public required PagedRange PagedRange { get; set; }
-    public required SortingType SortingType { get; set; }
+    public SortingType SortingType { get; set; } = SortingType.ByRatingDescending;
     public string? TagName { get; set; } = default;
 }
 public enum SortingType
@@ -27,8 +27,6 @@ public class PostRequestModelValidator : AbstractValidator<PostRequestModel>
     public PostRequestModelValidator(RepositoryFactoryInterface<IPostsRepository> repositoryFactory)
     {
         RuleFor(item => item.PagedRange).SetValidator(new PagedRangeValidator());
-        RuleFor(item => item.SortingType).NotEmpty()
-            .WithMessage("Please specify sorting type");
         RuleFor(item => item.TagName)
             .MustAsync(async (value, _) =>
             {

@@ -7,4 +7,6 @@ public interface IPostsValidators
 {
     IModelValidator<NewPostModel> NewPostModelValidator { get; }
     IModelValidator<RemovePostModel> RemovePostModelValidator { get; }
+    IModelValidator<UpdatePostModel> UpdatePostModelValidator { get; }
+    IModelValidator<PostRequestModel> PostRequestModelValidator { get; }
 }

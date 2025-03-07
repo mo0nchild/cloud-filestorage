@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Видео с Range-запросами</title>
+</head>
+<body>
+
+    <h2>Стриминг видео с сервера</h2>
+    <img style="width: 200px; height: 100px;" id="videoPreview" alt="..."/>
+
+    <video id="videoPlayer" controls width="720">
+        <source id="videoSource" preload="metadata" type="video/mp4">
+        Ваш браузер не поддерживает видео.
+    </video>
+
+    <script>
+        const videoUuid = '0a660bd4-eefd-4839-b250-384a1c6d7f04'
+        const videoUrl = `http://localhost:5106/fileAccess/access?fileUuid=${videoUuid}`;
+        const videoElement = document.getElementById('videoSource')
+        const videoPreview = document.getElementById('videoPreview')
+        videoElement.src = videoUrl
+        videoPreview.src = `http://localhost:5106/thumbnail/access?fileUuid=${videoUuid}`
+        async function checkVideoSize() {
+            try {
+                const response = await fetch(videoUrl, { method: "HEAD" });
+
+                if (!response.ok) throw new Error("Ошибка получения информации о файле");
+                for (const item of response.headers.keys()) {
+                    console.log(item)
+                }
+                const contentLength = response.headers.get("Content-Length");
+                const acceptRanges = response.headers.get("Accept-Ranges");
+
+                console.log(`Размер видео: ${contentLength} байт`);
+                console.log(`Поддержка Range-запросов: ${acceptRanges}`);
+
+            } catch (error) {
+                console.error("Ошибка при проверке видео:", error);
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", checkVideoSize);
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+    <ItemGroup>
+        <PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.1" />
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.1" />
+        <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="8.0.0" />
+        <PackageReference Include="MimeTypes" Version="2.5.2">
+          <PrivateAssets>all</PrivateAssets>
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+    </ItemGroup>
+    <ItemGroup>
+      <ProjectReference Include="..\..\CloudStorage.Domains\CloudStorage.Domain.Core\CloudStorage.Domain.Core.csproj" />
+      <ProjectReference Include="..\..\CloudStorage.Domains\CloudStorage.Domain.FileStorage\CloudStorage.Domain.FileStorage.csproj" />
+      <ProjectReference Include="..\..\CloudStorage.Domains\CloudStorage.Domain.Messages\CloudStorage.Domain.Messages.csproj" />
+      <ProjectReference Include="..\..\CloudStorage.Shared\CloudStorage.Shared.Commons\CloudStorage.Shared.Commons.csproj" />
+      <ProjectReference Include="..\CloudStorage.Application.Commons\CloudStorage.Application.Commons.csproj" />
+    </ItemGroup>
+</Project>

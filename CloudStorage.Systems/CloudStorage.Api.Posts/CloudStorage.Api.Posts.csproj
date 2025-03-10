@@ -1,0 +1,37 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.6"/>
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.10">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Include="..\..\.dockerignore">
+        <Link>.dockerignore</Link>
+      </Content>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\CloudStorage.Infrastructures\CloudStorage.Databases\CloudStorage.Database.Posts\CloudStorage.Database.Posts.csproj" />
+      <ProjectReference Include="..\..\CloudStorage.Infrastructures\CloudStorage.Documents\CloudStorage.Documents.Elastic\CloudStorage.Documents.Elastic.csproj" />
+      <ProjectReference Include="..\..\CloudStorage.Infrastructures\CloudStorage.Documents\CloudStorage.Documents.Mongo\CloudStorage.Documents.Mongo.csproj" />
+      <ProjectReference Include="..\..\CloudStorage.Shared\CloudStorage.Shared.Commons\CloudStorage.Shared.Commons.csproj" />
+      <ProjectReference Include="..\..\CloudStorage.Shared\CloudStorage.Shared.Security\CloudStorage.Shared.Security.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Requests\" />
+    </ItemGroup>
+
+</Project>

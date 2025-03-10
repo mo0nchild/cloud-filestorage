@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\CloudStorage.Domains\CloudStorage.Domain.CommonModels\CloudStorage.Domain.CommonModels.csproj" />
+      <ProjectReference Include="..\..\CloudStorage.Domains\CloudStorage.Domain.Core\CloudStorage.Domain.Core.csproj" />
+      <ProjectReference Include="..\..\CloudStorage.Domains\CloudStorage.Domain.Messages\CloudStorage.Domain.Messages.csproj" />
+      <ProjectReference Include="..\..\CloudStorage.Domains\CloudStorage.Domain.Users\CloudStorage.Domain.Users.csproj" />
+      <ProjectReference Include="..\..\CloudStorage.Shared\CloudStorage.Shared.Commons\CloudStorage.Shared.Commons.csproj" />
+      <ProjectReference Include="..\CloudStorage.Application.Commons\CloudStorage.Application.Commons.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.10" />
+    </ItemGroup>
+
+</Project>

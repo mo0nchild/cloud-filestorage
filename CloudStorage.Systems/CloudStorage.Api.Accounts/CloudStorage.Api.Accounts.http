@@ -1,0 +1,6 @@
+@CloudStorage.Api.Accounts_HostAddress = http://localhost:5075
+
+GET {{CloudStorage.Api.Accounts_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

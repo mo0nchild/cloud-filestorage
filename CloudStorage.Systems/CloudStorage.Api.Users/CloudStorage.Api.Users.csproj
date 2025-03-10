@@ -1,0 +1,36 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0"/>
+        <PackageReference Include="Microsoft.AspNetCore.Grpc.JsonTranscoding" Version="8.0.13" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.10">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Include="..\..\.dockerignore">
+        <Link>.dockerignore</Link>
+      </Content>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\CloudStorage.Applications\CloudStorage.Application.Users\CloudStorage.Application.Users.csproj" />
+      <ProjectReference Include="..\..\CloudStorage.Infrastructures\CloudStorage.Databases\CloudStorage.Database.Users\CloudStorage.Database.Users.csproj" />
+      <ProjectReference Include="..\..\CloudStorage.Infrastructures\CloudStorage.GrpcServices\CloudStorage.GrpcServices.Users\CloudStorage.GrpcServices.Users.csproj" />
+      <ProjectReference Include="..\..\CloudStorage.Infrastructures\CloudStorage.MessageBrokers\CloudStorage.MessageBrokers.RabbitMQ\CloudStorage.MessageBrokers.RabbitMQ.csproj" />
+      <ProjectReference Include="..\..\CloudStorage.Infrastructures\CloudStorage.MessageBrokers\CloudStorage.MessageBrokers.Saga\CloudStorage.MessageBrokers.Saga.csproj" />
+      <ProjectReference Include="..\..\CloudStorage.Shared\CloudStorage.Shared.Commons\CloudStorage.Shared.Commons.csproj" />
+      <ProjectReference Include="..\..\CloudStorage.Shared\CloudStorage.Shared.Contracts\CloudStorage.Shared.Contracts.csproj" />
+      <ProjectReference Include="..\..\CloudStorage.Shared\CloudStorage.Shared.Security\CloudStorage.Shared.Security.csproj" />
+    </ItemGroup>
+
+</Project>

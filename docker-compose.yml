@@ -1,15 +1,15 @@
 ﻿
 services:
-#  pinterest.api.users:
-#    image: pinterest.api.users
+#  CloudStorage.api.users:
+#    image: CloudStorage.api.users
 #    build:
 #      context: .
-#      dockerfile: Pinterest.Systems/Pinterest.Api.Users/Dockerfile
-#  pinterest.api.posts:
-#    image: pinterest.api.posts
+#      dockerfile: CloudStorage.Systems/CloudStorage.Api.Users/Dockerfile
+#  CloudStorage.api.posts:
+#    image: CloudStorage.api.posts
 #    build:
 #      context: .
-#      dockerfile: Pinterest.Systems/Pinterest.Api.Posts/Dockerfile
+#      dockerfile: CloudStorage.Systems/CloudStorage.Api.Posts/Dockerfile
 #    ports:
 #      - "8086:8080"
 #    depends_on:
@@ -20,9 +20,9 @@ services:
 #      rabbitmq:
 #        condition: service_started
 #    networks:
-#      pinterest-network:
+#      CloudStorage-network:
 #        aliases:
-#          - pinterest.api.posts
+#          - CloudStorage.api.posts
 #        ipv4_address: 172.24.0.6
 #    deploy:
 #      restart_policy:
@@ -35,16 +35,16 @@ services:
     environment:
       - POSTGRES_NAME=postgres
       - POSTGRES_PASSWORD=1234567890
-      - POSTGRES_DB=pinterest.accounts
+      - POSTGRES_DB=CloudStorage.accounts
     ports:
       - "7272:5432"
     networks:
-      pinterest-network:
+      CloudStorage-network:
         aliases:
           - postgres
         ipv4_address: 172.24.0.2
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U postgres -d pinterest.accounts" ]
+      test: [ "CMD-SHELL", "pg_isready -U postgres -d CloudStorage.accounts" ]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -65,7 +65,7 @@ services:
     volumes:
       - ./docker-volumes/mongo-data:/data/db
     networks:
-      pinterest-network:
+      CloudStorage-network:
         aliases:
           - mongodb
         ipv4_address: 172.24.0.3
@@ -84,7 +84,7 @@ services:
     volumes:
       - "./docker-volumes/rabbitmq-data:/var/lib/rabbitmq"
     networks:
-      pinterest-network:
+      CloudStorage-network:
         aliases:
           - rabbitmq
         ipv4_address: 172.24.0.4
@@ -96,7 +96,7 @@ services:
       - "9002:9000"
       - "9001:9001"
     networks:
-      pinterest-network:
+      CloudStorage-network:
         aliases:
           - minio
         ipv4_address: 172.24.0.5
@@ -112,7 +112,7 @@ services:
     image: elasticsearch:custom
     build:
       context: .
-      dockerfile: Pinterest.Infrastructures/Pinterest.Documents/Pinterest.Documents.Elastic/Dockerfile.elastic
+      dockerfile: CloudStorage.Infrastructures/CloudStorage.Documents/CloudStorage.Documents.Elastic/Dockerfile.elastic
     container_name: elasticsearch
     environment:
       - discovery.type=single-node
@@ -125,13 +125,13 @@ services:
       - "9200:9200"
       - "9300:9300"
     networks:
-      pinterest-network:
+      CloudStorage-network:
         aliases:
           - elasticsearch
         ipv4_address: 172.24.0.6
 
 networks:
-  pinterest-network:
+  CloudStorage-network:
     driver: bridge
     ipam:
       driver: default

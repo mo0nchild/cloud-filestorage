@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\..\CloudStorage.Applications\CloudStorage.Application.Commons\CloudStorage.Application.Commons.csproj" />
+      <ProjectReference Include="..\..\..\CloudStorage.Domains\CloudStorage.Domain.Core\CloudStorage.Domain.Core.csproj" />
+      <ProjectReference Include="..\..\CloudStorage.Documents\CloudStorage.Documents.Mongo\CloudStorage.Documents.Mongo.csproj" />
+      <ProjectReference Include="..\CloudStorage.MessageBrokers.RabbitMQ\CloudStorage.MessageBrokers.RabbitMQ.csproj" />
+    </ItemGroup>
+
+</Project>
